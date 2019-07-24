@@ -1,0 +1,22 @@
+server:
+  port: 8881
+
+
+
+spring:
+  activemq:
+   broker-url : tcp://172.16.86.101:61616
+  redis:
+    host: 192.168.10.204
+    port: 6379
+    jedis:
+      pool:
+       max-active: 8
+       max-wait: 1
+       max-idle: 8
+       min-idle: 0
+    timeout: 1000
+  thymeleaf:
+    prefix: classpath:/templates/
+
+   

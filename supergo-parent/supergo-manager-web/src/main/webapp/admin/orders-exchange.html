@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>换货管理</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../plugins/laydate/laydate.js"></script>
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini">
+    <!-- .box-body -->
+
+    <div class="box-header with-border">
+        <h3 class="box-title">换货管理</h3>
+    </div>
+
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+            <!--工具栏-->
+            <div class="pull-left">
+                <div class="form-group form-inline">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" title="换货成功">
+                            <i class="fa fa-check"></i>换货寄回</button>
+                        <button type="button" class="btn btn-default" title="换货成功">
+                            <i class="fa fa-check"></i>换货成功</button>
+                        <button type="button" class="btn btn-default" title="换货成功">
+                            <i class="fa fa-check"></i>换货取消</button>
+
+                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();">
+                            <i class="fa fa-refresh"></i> 刷新</button>
+                    </div>
+                </div>
+            </div>
+            <div class="box-tools pull-right">
+                <div class="has-feedback">
+                    换货状态：
+                    <select>
+                        <option value="">全部</option>
+                        <option value="0">换货寄回</option>
+                        <option value="1">换货成功</option>
+                        <option value="2">换货取消</option>
+                        <option value="3">退款成功</option>
+                        <option value="4">退款失败</option>
+                        <option value="5">取消退款</option>
+                        <option value="6">取消换货</option>
+                    </select>
+                    订单号：
+                    <input> 收货人：
+                    <input> 换货更新时间：
+                    <input type="text" class="demo-input" id="test10">
+
+                    <button class="btn btn-default">查询</button>
+                </div>
+            </div>
+            <script>
+                lay('#version').html('-v' + laydate.v);
+                //执行一个laydate实例
+                laydate.render({
+                    elem: '#test10'
+                    , type: 'datetime'
+                    , range: true
+                }); 
+            </script>
+            <!--工具栏/-->
+
+            <!--数据列表-->
+            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                <thead>
+                    <tr>
+                        <th class="" style="padding-right:0px">
+                            <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                        </th>
+                        <th class="sorting_asc">换货单号</th>
+                        <th class="sorting_asc">订单号</th>
+                        <th class="sorting">主订单号</th>
+                        <th class="sorting">商品名称</th>
+                        <th class="sorting">商品售价</th>
+                        <th class="sorting">收货人</th>
+                        <th class="sorting">联系方式</th>
+                        <th class="sorting">实际支付</th>
+                        <th class="sorting">审核状态</th>
+                        <th class="sorting">申请时间</th>
+                        <th class="text-center">换货状态</th>
+                        <th class="sorting">换货更新时间</th>
+                        <th class="sorting">供应商名称</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                        <td>
+                            <a data-toggle="modal" data-target="#showModal" />1</td>
+                        <td>
+                            <a data-toggle="modal" data-target="#showModal" />2016110314430470</td>
+                        <td>2016110314430470</td>
+                        <td>小米6S手机</td>
+                        <td>333</td>
+                        <td>雷军</td>
+                        <td>18848985868</td>
+                        <td>666</td>
+                        <td>审批通过</td>
+                        <td>2018-05-09 21:03:03</td>
+                        <td class="text-center">
+                            <span>
+                                换货寄回
+                            </span>
+                        </td>
+                        <td>2016年11月03日 12:20:49</td>
+                        <td>小米科技</td>
+                        <td>
+                            <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">修改</button>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+            <!--数据列表/-->
+            <!-- 换货单单详情-->
+            <div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="myModalLabel">换货单详情</h3>
+                        </div>
+                        <div class="modal-body">
+
+                            <table class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                    <tr>
+
+                                        <th class="sorting">换货单详情</th>
+
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>换货单号</td>
+                                        <td> 1</td>
+
+                                        <td>商品名称 </td>
+
+                                        <td>1</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>商品售价</td>
+                                        <td> </td>
+                                        <td>商品数量</td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>收货人</td>
+                                        <td> </td>
+                                        <td>联系方式</td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>实际支付</td>
+                                        <td> </td>
+                                        <td>审核状态</td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>申请时间</td>
+                                        <td> </td>
+                                        <td>退货状态</td>
+                                        <td> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>换货更新时间</td>
+                                        <td> </td>
+                                        <td>供应商名称</td>
+                                        <td> </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 修改订单 -->
+            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="myModalLabel">修改换货单</h3>
+                        </div>
+                        <div class="modal-body">
+
+
+
+                            <table class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        
+										<th class="sorting">修改内容</th>
+
+                                </thead>
+                                <tbody>
+								
+                                    <tr>
+                                        <td>换货状态</td>
+                                        <td>
+                                            <input class="form-control" placeholder="退货状态"> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>换货更新时间</td>
+                                        <td>
+                                            <input class="form-control" placeholder="退货更新时间"> </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <!-- 数据表格 /-->
+
+
+    </div>
+    <!-- /.box-body -->
+
+</body>
+
+</html>

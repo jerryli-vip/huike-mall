@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbItemMapperExt" >
+  <resultMap id="BaseResultMap" type="com.supergo.pojo.ext.TbItem" >
+    <id column="item_id" property="id" jdbcType="INTEGER" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="brand" property="brand" jdbcType="VARCHAR" />
+    <result column="spec" property="spec" jdbcType="VARCHAR" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="selectByExample" resultMap="BaseResultMap" >
+    SELECT g.goods_id item_id,g.goods_name item_name,g.sell_price sell_price,g.spec_info spec,g.classify3 category,g.brand_name brand,i.img_path image,g.goods_id goods_id FROM (SELECT c.goods_id,c.goods_name,c.sell_price,c.spec_info,c.classify3,t.brand_name FROM  (SELECT g.goods_id,g.goods_name,g.sell_price,g.spec_info,p.classify3,p.brand FROM tb_goods g LEFT JOIN tb_product p ON g.product_id = p.product_id WHERE p.status = 2) c LEFT JOIN tb_brand t ON t.brand_id = c.brand) g LEFT JOIN tb_image i ON g.goods_id = i.goods_id AND i.is_master='Y'
+  </select>
+  <select id="selectByList" resultMap="BaseResultMap" parameterType="java.util.List">
+   SELECT
+	g.goods_id item_id,
+	g.goods_name item_name,
+	g.sell_price sell_price,
+	g.spec_info spec,
+	p.classify3 category,
+	t.brand_name brand,
+	i.img_path image,
+	g.goods_id goods_id 
+FROM
+	tb_goods g
+	LEFT JOIN tb_product p ON g.product_id = p.product_id
+	LEFT JOIN tb_brand t ON t.brand_id = p.brand
+	LEFT JOIN tb_image i ON g.goods_id = i.goods_id 
+WHERE
+	i.is_master = 'Y'
+    		<if test="list != null and list.size() > 0">
+    			AND g.goods_id in
+    			<foreach collection="list" item="goodsId" index="index" open="(" separator="," close=")">  
+                    #{goodsId, jdbcType=INTEGER}  
+                </foreach>
+               </if>
+  </select>
+  
+</mapper>

@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="supergo-sso-service:war">
+    <output-path>$PROJECT_DIR$/supergo-sso/supergo-sso-service/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>supergo-sso-service</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="supergo-sso-service.war">
+      <element id="artifact" artifact-name="supergo-sso-service:war exploded" />
+    </root>
+  </artifact>
+</component>

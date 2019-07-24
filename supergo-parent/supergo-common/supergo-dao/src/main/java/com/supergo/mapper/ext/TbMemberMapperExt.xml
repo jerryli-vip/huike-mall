@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbMemberMapperExt">
+	<select id="queryByPK" parameterType="com.supergo.pojo.TbMember" resultType="com.supergo.pojo.TbMember">
+		SELECT nickname nickname,sex sex,birthday birthday,address address,position position FROM tb_member
+		<where>
+			<if test="memberId != null">AND member_id = #{memberId}</if>
+		</where>
+		
+	</select>
+</mapper>

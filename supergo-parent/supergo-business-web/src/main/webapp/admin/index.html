@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台管理系统</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <!-- 页面meta /-->
+
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <script type="text/javascript">
+   
+         function SetIFrameHeight(){
+              var iframeid=document.getElementById("iframe"); //iframe id
+              if (document.getElementById){
+                iframeid.height =document.documentElement.clientHeight;                
+              }
+         }
+    
+    </script>    
+    
+    
+    <!-- 加入angularJS -->
+<script src="/plugins/angularjs/angular.min.js"></script>
+<!-- 加入angularjs的pagination模块 -->
+<script src="/plugins/angularjs/pagination.js"></script>
+<link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+
+<!-- 引入基础模块和控制器 -->
+<script src="/js/supergo/base/base_app.js"></script>
+<script src="/js/supergo/base/base_controller.js"></script>
+
+<!-- 编写brand.js文件 -->
+<script src="/js/supergo/index.js"></script>
+
+<style>
+    .table-striped>tbody>tr:nth-of-type(odd) {
+        background-color: #B2DFEE;
+    }
+    
+    .bg-olive {
+        background-color: #00cc33!important;
+    }
+    
+    .btn-success {
+        background-color: #00cc33;
+        border-color: #006633;
+    }
+    
+    .btn-success {
+        background-color: #006633;
+    }
+</style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini" ng-app="supergo"
+    ng-controller="indexController" ng-init="info()" >
+
+    <div class="wrapper">
+
+        <!-- 页面头部 -->
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>慧科商城</b></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>慧科商城</b>商家后台</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                      
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="../img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs">{{shopUser.shopUserName}}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="../img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                                    <p>
+                                       {{shopUser.shopUserName}}
+                                        <small>最后登录  {{shopUser.lastLoginTime}} </small>
+                                    </p>
+                                </li>
+                                
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">修改密码</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="#" class="btn btn-default btn-flat">注销</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- 页面头部 /-->
+
+        <!-- 导航侧栏 -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="../img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p>  {{shopUser.shopUserName}}</p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+                    </div>
+                </div>
+                <ul class="sidebar-menu"  >
+                    <li class="header">菜单</li>
+                    <li id="admin-index"><a href="index.html"><i class="fa fa-dashboard"></i> <span>首页</span></a></li>
+					
+					<!-- 菜单 -->
+					<li class="treeview" ng-repeat="item in itemList"><a href="#"> <i class="fa fa-folder"  ></i>
+						<span>{{item.itemName}}</span> 
+							<span class="pull-right-container"> 
+							<i class="fa fa-angle-left pull-right"></i>
+						</span>
+							<ul class="treeview-menu"  >
+								<li id="admin-login" ng-repeat="menu in item.second">
+									<a href="{{menu.url}}" target="iframe"> 
+										<i class="fa fa-circle-o"></i>{{menu.itemName}}
+									</a>
+								</li>
+							</ul>
+
+					</a></li>
+					
+					<!--  
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-folder"></i> 
+                            <span>商品管理</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                
+                            <li id="admin-login">
+                                <a href="product_add.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 新增产品
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="product.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 产品管理
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="goods_edit.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 新增商品
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="goods.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 商品管理
+                                </a>
+                            </li>
+                        </ul>                        
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-folder"></i> 
+                            <span>订单管理</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                
+                            <li id="admin-login">
+                                <a href="orders-manage.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 订单管理
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="orders-return.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 订单退货管理
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="orders-exchange.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 订单换货管理
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="refund-manage.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 退款单管理
+                                </a>
+                            </li>
+                          
+                        </ul>                        
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-folder"></i> 
+                            <span>系统管理</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                
+                            <li id="admin-login">
+                                <a href="auth_user_management.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i>用户管理
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="auth_role_management.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i>角色管理
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="auth_management.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i>权限管理
+                                </a>
+                            </li>
+                        </ul>                        
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-folder"></i> 
+                            <span>基本管理</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                
+                            <li id="admin-login">
+                                <a href="seller.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 修改资料
+                                </a>
+                            </li>
+                            <li id="admin-login">
+                                <a href="password.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 修改密码
+                                </a>
+                            </li>
+                        </ul>                        
+                    </li>
+                   菜单 /-->
+
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- 导航侧栏 /-->
+
+        <!-- 内容区域 -->
+        <div class="content-wrapper">
+            <iframe width="100%" id="iframe" name="iframe"  onload="SetIFrameHeight()" 
+                    frameborder="0" src="home.html"></iframe>
+ 
+        </div>
+        <!-- 内容区域 /-->
+
+        <!-- 底部导航 -->
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.1.8
+            </div>
+            <strong>Copyright &copy; 2014-2018 <a href="http://www.supergou.cn">慧科商城开发部</a>.</strong> All rights reserved.
+        </footer>
+        <!-- 底部导航 /-->
+
+    </div>
+
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/dayjs/dayjs.min.js"></script>
+    <script>
+ 
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <script src="../plugins/adminLTE/js/app.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

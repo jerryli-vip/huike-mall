@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbSubOrderExtMapper">
+	<!-- 一对多查询之resultMap -->
+	<resultMap type="com.supergo.pojo.ext.TbSubOrderExt" id="TbSubOrderExtRstMap">
+		<!-- 用户信息 -->
+		<!-- ID标签建议在关联查询时必须加上 -->
+		<id column="ordersub_id" property="ordersubId" jdbcType="VARCHAR" />
+		<result column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="member_id" property="memberId" jdbcType="INTEGER" />
+		<result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="paymoney" property="paymoney" jdbcType="DECIMAL" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="expressfee" property="expressfee" jdbcType="DECIMAL" />
+		<result column="order_status" property="orderStatus" jdbcType="VARCHAR" />
+		<result column="pay_status" property="payStatus" jdbcType="VARCHAR" />
+		<result column="pay_model" property="payModel" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_id" property="createId" jdbcType="INTEGER" />
+		<result column="update_id" property="updateId" jdbcType="INTEGER" />
+		<result column="status_o" property="statusO" jdbcType="CHAR" />
+		<result column="bak2" property="bak2" jdbcType="VARCHAR" />
+		<result column="bak3" property="bak3" jdbcType="VARCHAR" />
+		<!-- 关联的订单信息 -->
+		<!-- 一对多映射（collection标签） -->
+		<!-- 相当于给集合内的对象元素元素 -->
+		<collection property="itemList" ofType="com.supergo.pojo.TbOrderItem">
+			<id column="order_item_id" property="orderItemId" jdbcType="INTEGER" />
+			<result column="ordersub_id" property="ordersubId" jdbcType="VARCHAR" />
+			<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+			<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+			<result column="goods_type" property="goodsType" jdbcType="VARCHAR" />
+			<result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+			<result column="actual_payment" property="actualPayment"
+				jdbcType="DECIMAL" />
+			<result column="quantity" property="quantity" jdbcType="INTEGER" />
+			<result column="discount" property="discount" jdbcType="VARCHAR" />
+			<result column="pay_status" property="payStatus" jdbcType="VARCHAR" />
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+			<result column="create_id" property="createId" jdbcType="INTEGER" />
+			<result column="update_id" property="updateId" jdbcType="INTEGER" />
+			<result column="item_status" property="itemStatus" jdbcType="CHAR" />
+			<result column="bak2" property="bak2" jdbcType="VARCHAR" />
+			<result column="bak3" property="bak3" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+	<select id="query" parameterType="com.supergo.pojo.TbSubOrder"
+		resultMap="TbSubOrderExtRstMap">
+		SELECT
+		tso.ordersub_id
+		ordersub_id,tso.create_time,
+		order_id,shop_id,shop_name,
+		item_status,
+		goods_name,goods_type,
+		tso.pay_status,
+		toi.order_item_id,
+		goods_id,sell_price,actual_payment,
+		quantity,discount,member_id,pay_time,paymoney,
+		expressfee,order_status,pay_model
+		FROM tb_sub_order tso
+		LEFT JOIN
+		tb_order_item toi ON tso.ordersub_id=toi.ordersub_id
+		<where>
+			<if test="memberId != null">
+				AND tso.member_id = #{memberId,jdbcType=INTEGER}
+			</if>
+			<if test="orderStatus != null">
+				AND tso.order_status = #{orderStatus,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY tso.create_time DESC
+	</select>
+
+
+</mapper>

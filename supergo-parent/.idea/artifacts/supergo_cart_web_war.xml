@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="supergo-cart-web:war">
+    <output-path>$PROJECT_DIR$/supergo-cart-web/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>supergo-cart-web</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="supergo-cart-web.war">
+      <element id="artifact" artifact-name="supergo-cart-web:war exploded" />
+    </root>
+  </artifact>
+</component>

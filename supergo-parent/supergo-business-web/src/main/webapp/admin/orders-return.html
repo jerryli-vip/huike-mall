@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>退货管理</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../plugins/laydate/laydate.js"></script>
+    <!-- 加入angularJS -->
+    <script src="/plugins/angularjs/angular.min.js"></script>  
+    <!-- 加入angularjs的pagination模块 -->
+    <script src="/plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+       <!-- 引入基础模块和控制器 -->
+    <script src="/js/supergo/base/base_app_pagination.js?"+new Date()></script>
+    <script src="/js/supergo/base/base_controller.js?"+new Date()></script>
+    <!-- 编写.js文件 -->
+    <script src="/js/supergo/orders-return.js"></script>
+    
+     <!-- 引入时间控件 -->
+    <script src="../plugins/dayjs/dayjs.min.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="supergo" ng-controller="returnController">
+    <!-- .box-body -->
+
+    <div class="box-header with-border">
+        <h3 class="box-title">退货管理</h3>
+    </div>
+
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+            <!--工具栏-->
+            <div class="pull-left">
+                <div class="form-group form-inline">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" title="已确认待收货" ng-click="returnReturn()">
+                            <i class="fa fa-check"></i>已确认待收货</button>
+                        <button type="button" class="btn btn-default" title="验货通过" ng-click="returnSuccess()">
+                            <i class="fa fa-check"></i>验货通过</button>
+                        <button type="button" class="btn btn-default" title="退货成功" ng-click="returnCancel()">
+                            <i class="fa fa-check"></i>退货成功</button>
+
+                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();">
+                            <i class="fa fa-refresh"></i> 刷新</button>
+                    </div>
+                </div>
+            </div>
+            <div class="box-tools pull-right">
+                <div class="has-feedback">
+                    退货状态：
+                    <select ng-model="searchBean.returnGoodsStatus">
+                        <option value="">全部</option>
+                        <option value="1">申请中</option>
+                        <option value="2">已确认待收货</option>
+                        <option value="3">确认收货并验货</option>
+                        <option value="4">验货通过</option>
+                        <option value="5">验货不通过已退回</option>
+                        <option value="6">客户取消</option>
+                        <option value="7">退货成功</option>
+                    </select>
+                    订单号：
+                    <input ng-model="searchBean.ordersubId"> 收货人：
+                    <input ng-model="searchBean.reciveName"> 退货更新时间：
+                    <input type="date" ng-model="searchBean.startTime"> <a>- </a>
+                    <input type="date" ng-model="searchBean.endTime">
+
+                    <button class="btn btn-default" ng-click="reloadList()">查询</button>
+                </div>
+            </div>
+            <script>
+                lay('#version').html('-v' + laydate.v);
+                //执行一个laydate实例
+                laydate.render({
+                    elem: '#test10'
+                    , type: 'datetime'
+                    , range: true
+                }); 
+            </script>
+            <!--工具栏/-->
+
+            <!--数据列表-->
+            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                <thead>
+                    <tr>
+                        <th class="" style="padding-right:0px">
+                            <input id="selall" type="checkbox" class="icheckbox_square-blue"
+                            ng-model="all" ng-click="selAll()">
+                        </th>
+                        <th class="sorting_asc">退货单号</th>
+                        <th class="sorting_asc">订单号</th>
+                        <th class="sorting">主订单号</th>
+                        <th class="sorting">商品名称</th>
+                        <th class="sorting">商品售价</th>
+                        <th class="sorting">收货人</th>
+                        <th class="sorting">联系方式</th>
+                        <th class="sorting">实际支付</th>
+                        <th class="sorting">申请时间</th>
+                        <th class="text-center">退货状态</th>
+                        <th class="sorting">退货更新时间</th>
+                        <th class="sorting">店铺名称</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="retuen in RetuenList">
+                        <td>
+                            <input type="checkbox"
+                             ng-checked="all"  
+                            ng-click="updateSelection($event,retuen.tbOrder)">
+                        </td>
+                        <td>
+                            <!-- <a data-toggle="modal" data-target="#showModal" /> -->{{retuen.returnGoodsId}}</td>
+                        <td>
+                            <a data-toggle="modal" data-target="#showModalDetail" ng-click="queryOrder(retuen.ordersubId)" />{{retuen.ordersubId}}</td>
+                        <td>{{retuen.tbOrder}}</td>
+                        <td>{{retuen.goodsName}}</td>
+                        <td>{{retuen.sellPrice}}</td>
+                        <td>{{retuen.reciveName}}</td>
+                        <td>{{retuen.reciveMobile}}</td>
+                        <td>{{retuen.actualPayment}}</td>
+                        <td>{{retuen.applyTime}}</td>
+                        <td class="text-center">
+                            <span ng-if="retuen.returnGoodsStatus==1">申请中</span>
+                            <span ng-if="retuen.returnGoodsStatus==2">已确认待收货</span>
+                            <span ng-if="retuen.returnGoodsStatus==3">确认收货并验货</span>
+                            <span ng-if="retuen.returnGoodsStatus==4">验货通过</span>
+                            <span ng-if="retuen.returnGoodsStatus==5">验货不通过已退回</span>
+                            <span ng-if="retuen.returnGoodsStatus==6">客户取消</span>
+                            <span ng-if="retuen.returnGoodsStatus==7">退货成功</span>
+                        </td>
+                        <td>{{retuen.returnGoodsTime}}</td>
+                        <td>{{retuen.shopName}}</td>
+                        <td>
+                            <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" 
+                            ng-click="showEditStatus(retuen)">修改</button>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+            <!--数据列表/-->
+
+<!-- angularjs提供的分页控件 -->
+                        <tm-pagination conf="paginationConf"></tm-pagination>
+
+
+
+            <!-- 退货单单详情-->
+            <div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="myModalLabel">退货单详情</h3>
+                        </div>
+                        <div class="modal-body">
+
+
+
+                            <table class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                    <tr>
+
+
+                                        <th class="sorting">退货单详情</th>
+
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>退货单号</td>
+                                        <td> 2016110314430471</td>
+
+                                        <td>商品名称 </td>
+
+                                        <td>2016110314430470</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>商品售价</td>
+                                        <td> </td>
+                                        <td>商品数量</td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>收货人</td>
+                                        <td> </td>
+                                        <td>联系方式</td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>实际支付</td>
+                                        <td> </td>
+                                        <td>审核状态</td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>申请时间</td>
+                                        <td> </td>
+                                        <td>退货状态</td>
+                                        <td> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>退货更新时间</td>
+                                        <td> </td>
+                                        <td>供应商名称</td>
+                                        <td> </td>
+                                    </tr>
+
+
+
+
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 订单详情-->
+            <div class="modal fade" id="showModalDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="myModalLabel">订单详情</h3>
+                        </div>
+                        <div class="modal-body">
+
+                            <!-- 正文区域 -->
+                            <section class="content">
+
+                                <div class="box-body">
+
+                                    <!--tab页-->
+                                    <div class="nav-tabs-custom">
+
+                                        <!--tab头-->
+                                        <ul class="nav nav-tabs">
+                                            <li class="active">
+                                                <a href="#order" data-toggle="tab">订单信息</a>
+                                            </li>
+                                            <li>
+                                                <a href="#orderlist" data-toggle="tab">订单明细</a>
+                                            </li>
+                                            <li>
+                                                <a href="#customer" data-toggle="tab">收货人</a>
+                                            </li>
+                                           <!--  <li>
+                                                <a href="#orderstatus" data-toggle="tab">订单状态</a>
+                                            </li> -->
+                                        </ul>
+                                        <!--tab头/-->
+
+                                        <!--tab内容-->
+                                        <div class="tab-content">
+
+                                            <!--表单内容-->
+                                            <!--  订单详情-->
+                                            <div class="tab-pane active" id="order">
+                                                <div class="row data-type">
+                                                    <table class="table table-bordered table-striped table-hover dataTable">
+                                                        <tbody  >
+                                                            <tr  >
+                                                                <td>订单号</td>
+                                                                <td> {{orderList.ordersubId}}</td>
+
+                                                                <td>下单时间 </td>
+
+                                                                <td>{{orderList.createTime}}</td>
+ </tr>
+                                                            <tr>
+                                                                <td>下单人ID</td>
+                                                                <td>{{orderList.memberId}}</td>
+                                                                <td>下单人姓名</td>
+                                                                <td>{{orderList.}} </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>供应商名称</td>
+                                                                <td>{{orderList.shopName}} </td>
+                                                                <td>订单状态</td>
+                                                                <td>{{orderList.orderStatus}} </td>
+                                                            </tr>
+                                                            <tr>
+                                                               
+                                                             <td>订单操作</td>
+                                                                <td> {{orderList.payStatus}}</td>
+                                                                 <td>支付渠道</td>
+                                                                <td>{{orderList.}} </td>
+                                                            </tr>
+                                                            <tr>
+                                                                
+                                                                <td>支付时间</td>
+                                                                <td>{{orderList.payTime}} </td>
+                                                                <td>支付状态</td>
+                                                                <td>{{orderList.payStatus}} </td>
+                                                            </tr>
+
+                                                            
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+
+                                            <!--订单明细-->
+                                            <div class="tab-pane" id="orderlist">
+                                                <div class="row data-type">
+
+                                                    <table class="table table-bordered table-striped table-hover dataTable">
+                                                        <tbody >
+                                                            <tr >
+                                                                <td>商品编码</td>
+                                                                <td> {{ordersList.ordersubId}}</td>
+
+                                                                <td>供应商名称 </td>
+
+                                                                <td>{{ordersList.shopName}}</td>
+
+
+                                                            </tr>
+                                                            <tr>
+                                                                <td>商品名称</td>
+                                                                <td>{{ordersList.goodsName}}</td>
+                                                               
+                                                            
+                                                           
+                                                                <td>商品规格</td>
+                                                                <td>{{ordersList.goodsType}} </td>
+                                                               </tr> 
+                                                                 <tr>
+                                                               
+                                                           
+                                                                <td>售价</td>
+                                                                <td>{{ordersList.sellPrice}} </td>
+                                                              
+                                                                <td>数量</td>
+                                                                <td>{{ordersList.quantity}} </td>
+                                                               </tr>
+                                                            <tr>
+                                                                <td>合计金额</td>
+                                                                <td>{{ordersList.actualPayment}} </td>
+                                                           
+                                                                <td>运费</td>
+                                                                <td> {{ordersList.expressfee}}</td>
+                                                                 </tr>
+                                                            <tr>
+                                                                <td>结算金额</td>
+                                                                <td>{{ordersList.paymoney}}</td>
+
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+
+
+                                            <!--收货人-->
+                                            <div class="tab-pane" id="customer">
+                                                <div class="row data-type">
+                                                    <table class="table table-bordered table-striped table-hover dataTable">
+                                                        <tbody >
+                                                            <tr   >
+                                                                <td>收货人</td>
+                                                                <td>{{deliveryList.reciveName}}</td>
+                                                                <td>收货地址 </td>
+                                                                <td>{{deliveryList.reciveAddress}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>快递公司</td>
+                                                                <td>{{deliveryList.}}</td>
+                                                                <td>快递单号</td>
+                                                                <td>{{deliveryList.postId}} </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>运费</td>
+                                                                <td>{{deliveryList.postFee}} </td>
+                                                                <td>邮编</td>
+                                                                <td>{{deliveryList.}} </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>手机号码</td>
+                                                                <td>{{deliveryList.reciveMobile}} </td>
+                                                                <td>邮箱</td>
+                                                                <td>{{deliveryList.reciveEmail}} </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>电子邮件</td>
+                                                                <td>{{deliveryList.reciveEmail}}</td>
+                                                                <td>备注说明</td>
+                                                                <td>{{deliveryList.}}</td>
+                                                            </tr>
+                                                      </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!--tab内容/-->
+                                        <!--表单内容/-->
+
+                                    </div>
+
+                                </div>
+
+
+                            </section>
+
+
+                            <div class="modal-footer">
+
+                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 修改退货管理-->
+            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="editModal">修改退货管理</h3>
+                        </div>
+                        <div class="modal-body">
+
+                            <table class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                    <th class="sorting">修改内容</th>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td>退货状态</td>
+                                        <td>
+                                        <select ng-model="editModal.returnGoodsStatus">
+					                        <option value="1">申请中</option>
+					                        <option value="2">已确认待收货</option>
+					                        <option value="3">确认收货并验货</option>
+					                        <option value="4">验货通过</option>
+					                        <option value="5">验货不通过已退回</option>
+					                        <option value="6">客户取消</option>
+					                        <option value="7">退货成功</option>
+					                    </select>
+                                            <!-- <input ng-model="editModal.returnGoodsStatus" class="form-control" placeholder="退货状态"> </td> -->
+                                    </tr>
+                                    <tr>
+                                        <td>退货更新时间</td>
+                                        <td>
+                                            <input ng-model="editModal.returnGoodsTime" type="date" class="form-control" placeholder="退货更新时间"> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="edit(editModal)">保存</button>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- 数据表格 /-->
+
+
+    </div>
+    <!-- /.box-body -->
+
+</body>
+
+</html>

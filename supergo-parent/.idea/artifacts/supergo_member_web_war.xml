@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="supergo-member-web:war">
+    <output-path>$PROJECT_DIR$/supergo-member-web/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>supergo-member-web</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="supergo-member-web.war">
+      <element id="artifact" artifact-name="supergo-member-web:war exploded" />
+    </root>
+  </artifact>
+</component>

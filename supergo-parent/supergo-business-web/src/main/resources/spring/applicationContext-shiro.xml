@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+	<!-- 配置shiro的过滤器工厂bean -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- 注入安全管理器 -->
+		<property name="securityManager" ref="securityManager"></property>
+		<!-- 认证失败跳转到登录页面 <property name="loginUrl" value="/login.html"></property> 
+		 授权失败跳转到授权失败页面 <property name="unauthorizedUrl" value="/unauthorized.html"></property> -->
+		
+		<!-- 配置授权和认证URL规则 -->
+		<property name="filterChainDefinitions">
+			<value>
+				/js/** = anon
+				/css/** = anon
+				/img/** = anon
+				/plugins/** = anon
+				/register** =anon
+				/shopUser/insert = perms["shopuser.manager.insert"]   <!-- 用户添加按钮 -->
+				/shopUser/delete = perms["shopuser.manager.delete"]   <!-- 用户删除按钮 -->
+				/shopUser/resetPassword = perms["shopuser.manager.resetPassword"]  <!-- 用户重置按钮 -->
+				/shopUser/update = perms["shopuser.manager.update"]  <!-- 用户修改按钮 -->
+				/accredit** = perms["shopuser.manager.accredit"]  <!-- 用户授权 -->
+				/shopUser/query** = perms["shopuser.manager.query"]  <!-- 用户查询 -->
+				/shopUser/show** = perms["shopuser.manager.show"]  <!-- 用户查看角色 -->
+				/role/insert = perms["shoprole.manager.insert"]  <!-- 添加角色 -->
+				/role/delete = perms["shoprole.manager.delete"] <!-- 删除角色 -->
+				/role/query** = perms["shoprole.manager.query"]  <!-- 角色查询 -->
+				/role/accredit** = perms["shoprole.manager.accredit"]  <!-- 角色授权 -->
+				/role/show** = perms["shoprole.manager.showauthority"]  <!-- 查看角色权限 -->
+				/authority/insert = perms["shopauthority.manager.insert"]  <!-- 权限添加 -->
+				/authority/delete = perms["shopauthority.manager.delete"] <!-- 权限删除 -->
+				/authority/query = perms["shopauthority.manager.query"]  <!-- 权限查询 -->
+				/authority/update = perms["shopauthority.manager.update"]  <!-- 权限修改 -->
+				/orders/querymanage** = perms["order.manager.query"]  <!-- 订单查询 -->
+				/orders/return = perms["order.manager.returnmanage.return"]  <!-- 订单退货按钮已确认待收货按钮 -->
+				/orders/success = perms["order.manager.returnmanage.success"]  <!-- 验货通过按钮 -->
+				/orders/cancel = perms["order.manager.returnmanage.cancel"]  <!-- 退货成功按钮 -->
+				/orders/edit = perms["order.manager.returnmanage.update"]  <!-- 订单退货管理修改按钮 -->
+				/exchange/send = perms["order.manager.exchangemanager.send"]  <!-- 订单换货管理换货寄回按钮 -->
+				/exchange/exchangesuccess = perms["order.manager.exchangemanager.exchangesuccess"] <!-- 订单换货管理换货成功按钮 -->
+				/exchange/exchangecancel = perms["order.manager.exchangemanager.exchangesuccess"]  <!-- 订单换货管理换货取消按钮 -->
+				/exchange/query** = perms["order.manager.exchangemanager.query"]  <!-- 订单换货管理查询按钮 -->
+				/exchange/edit = perms["order.manager.exchangemanager.update"]  <!-- 订单换货管理修改按钮 -->
+				/refund/refundsuccess = perms["order.manager.returnnote.refundsuccess"]  <!-- 退货单管理退货成功按钮 -->
+				/refund/refundfail = perms["order.manager.returnnote.refundfail"]  <!-- 退货单管理退货失败按钮 -->
+				/refund/refundcancel = perms["order.manager.returnnote.refundcancel"]  <!-- 退货单管理取消退款 -->
+				/refund/query** perms["order.manager.returnnote.query"] <!-- 退货单管理查询 -->
+				/CheckImgServlet* = anon
+				/login* = anon
+				/shopregister* = anon
+				/shoplogin.html = anon
+				<!-- /admin/product.html = perms["product.list"] -->
+				/** = authc
+			</value>
+		</property>
+		<property name="filters">
+			<map>
+				<entry key="authc"  value-ref="filter_authc" />
+				<entry key="perms" value-ref="filter_perms" />
+			</map>
+		</property>
+		
+	</bean>
+
+	<!-- 配置安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- 注入自定义的Realm -->
+		<property name="realm" ref="supergoRealm"></property>
+		<!-- 注入缓存管理器 -->
+		<property name="cacheManager" ref="cacheManager"></property>
+	</bean>
+	<!-- 注册缓存管理器 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager" >
+		<!-- 注入ehcache的配置文件 -->
+		<property name="cacheManagerConfigFile" value="classpath:spring/ehcache.xml"></property>
+	</bean>
+	<bean id="supergoRealm" class="com.supergo.shiro.SupergoRealm"></bean>
+	<bean id="filter_authc" class="com.supergo.shiro.ShiroLoginFilter" />
+	<bean id="filter_perms"  class="com.supergo.shiro.ShiroPermsFilter" />
+
+	<!-- 配置切面类 -->
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor"></bean>
+
+
+</beans>

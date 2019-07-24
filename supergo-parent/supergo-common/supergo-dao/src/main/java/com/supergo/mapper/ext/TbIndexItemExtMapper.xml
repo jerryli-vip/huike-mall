@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbIndexItemExtMapper">
+	<resultMap type="com.supergo.pojo.ext.TbIndexItemExt" id="oneItemAndSecondItemRstMap">
+		<!-- 一级菜单映射 -->
+		<id property="itemId" column="oneItemId" />
+		<result property="itemName" column="oneItemName" />
+		<result property="grade" column="oneItemGrade" />
+		<!-- 二级菜单映射 -->
+		<collection property="second" ofType="com.supergo.pojo.ext.TbIndexItemExt">
+			<id property="itemId" column="secondItemId" />
+			<result property="itemName" column="secondItemName" />
+			<result property="grade" column="secondGrade" />
+			<result property="url" column="url" />
+		</collection>
+	</resultMap>
+	<!-- 无效：第一版一部分 -->
+	<select id="queryOneItem" parameterType="java.lang.String"
+		resultType="com.supergo.pojo.ext.TbIndexItemExt">
+		select authority_name
+		oneItem from tb_authority ta inner
+		join tb_role_authority ra on
+		ta.authority_id = ra.authority_id inner
+		join tb_role tr on ra.role_id
+		= tr.role_id inner join tb_sysuser_role
+		sr on tr.role_id = sr.role_id
+		inner join tb_sysuser ts on sr.sysuser_id
+		= ts.sysuser_id where
+		username =#{username} AND authority_priority = 1
+		AND is_item = "Y"
+	</select>
+	<!-- 无效：第一版二部分 -->
+	<select id="querySecondItem" parameterType="java.lang.String"
+		resultType="com.supergo.pojo.ext.TbIndexItemExt">
+		select authority_name
+		secondItem,url secondUrl from
+		tb_authority ta inner join tb_role_authority ra on
+		ta.authority_id =
+		ra.authority_id inner join tb_role tr on ra.role_id
+		= tr.role_id inner
+		join tb_sysuser_role sr on tr.role_id = sr.role_id
+		inner join
+		tb_sysuser ts on sr.sysuser_id = ts.sysuser_id where
+		username
+		=#{username} AND authority_priority = 2 AND is_item = "Y"
+	</select>
+
+	<!-- 无效：第二版 -->
+	<select id="queryItem" parameterType="java.lang.String"
+		resultMap="oneItemAndSecondItemRstMap">
+		select ta1.authority_id oneItemId,ta1.authority_name
+		oneItemName,ta1.authority_priority oneItemGrade,ta2.authority_id
+		secondItemId,ta2.authority_name
+		secondItemName,ta2.url
+		url,ta2.authority_priority secondGrade from
+		tb_authority ta1 LEFT join
+		tb_authority
+		ta2 on ta1.authority_id = ta2.parent_id
+		inner join
+		tb_role_authority ra on
+		ta1.authority_id =
+		ra.authority_id inner
+		join
+		tb_role tr on ra.role_id
+		= tr.role_id inner
+		join tb_sysuser_role sr
+		on
+		tr.role_id = sr.role_id
+		inner join
+		tb_sysuser ts on sr.sysuser_id =
+		ts.sysuser_id where
+		username
+		=#{username} AND ta1.authority_priority = 1
+		ORDER BY ta1.sort,ta2.sort
+	</select>
+
+	<!-- 运营商权限菜单 -->
+	<select id="queryOperatorItem" parameterType="java.lang.String"
+		resultMap="oneItemAndSecondItemRstMap">
+		SELECT
+		ta1.authority_id oneItemId,
+		ta1.authority_name
+		oneItemName,
+		ta1.authority_priority oneItemGrade,
+		ta2.authority_id
+		secondItemId,
+		ta2.authority_name secondItemName,
+		ta2.url url,
+		ta2.authority_priority secondGrade
+		FROM
+		tb_authority ta1
+		LEFT JOIN
+		tb_authority ta2 ON ta1.authority_id = ta2.parent_id
+		INNER JOIN
+		tb_role_authority ra ON ta1.authority_id = ra.authority_id
+		INNER JOIN
+		tb_role tr ON ra.role_id = tr.role_id
+		INNER JOIN tb_sysuser_role sr ON
+		tr.role_id = sr.role_id
+		INNER JOIN tb_sysuser ts ON sr.sysuser_id =
+		ts.sysuser_id
+		WHERE
+		username = #{userName} AND ta1.authority_priority =
+		1 AND ta1.type = 1
+
+		ORDER BY
+		ta1.sort,
+		ta2.sort;
+	</select>
+
+	<!-- 商家权限菜单 -->
+	<select id="queryShopItem" parameterType="java.lang.String"
+		resultMap="oneItemAndSecondItemRstMap">
+		SELECT
+		ta1.authority_id oneItemId,
+		ta1.authority_name
+		oneItemName,
+		ta1.authority_priority oneItemGrade,
+		ta2.authority_id
+		secondItemId,
+		ta2.authority_name secondItemName,
+		ta2.url url,
+		ta2.authority_priority secondGrade
+		FROM
+		tb_authority ta1
+		LEFT JOIN
+		tb_authority ta2 ON ta1.authority_id = ta2.parent_id
+		INNER JOIN
+		tb_role_authority ra ON ta1.authority_id = ra.authority_id
+		INNER JOIN
+		tb_role tr ON ra.role_id = tr.role_id
+		INNER JOIN tb_shop_user_role sr
+		ON tr.role_id = sr.role_id
+		INNER JOIN tb_shop_user ts ON
+		sr.shop_user_id = ts.shop_user_id
+		WHERE
+		shop_user_name = #{userName} AND
+		ta1.authority_priority = 1 AND ta1.type = 2
+		ORDER BY
+		ta1.sort,
+		ta2.sort
+	</select>
+</mapper>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<!-- 页面meta -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>角色管理</title>
+<meta
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+<link rel="stylesheet" href="../plugins/ztree/zTreeStyle/zTreeStyle.css">
+<link rel="stylesheet"
+	href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../plugins/ztree/demo/demo.css">
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="../plugins/ztree/js/jquery.ztree.core.js"></script>
+<script src="../plugins/ztree/js/jquery.ztree.excheck.js"></script>
+<!-- 加入angularJS -->
+<script src="/plugins/angularjs/angular.min.js"></script>
+<!-- 加入angularjs的pagination模块 -->
+<script src="/plugins/angularjs/pagination.js"></script>
+<link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+<!-- 引入基础模块和控制器 -->
+<script src="/js/supergo/base/base_app_pagination.js"></script>
+<script src="/js/supergo/base/base_controller.js"></script>
+<!-- 编写role.js文件 -->
+<script src="/js/supergo/role.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="supergo"
+	ng-controller="roleController">
+	<!-- .box-body -->
+	<div class="box-header with-border">
+		<h3 class="box-title">角色管理</h3>
+	</div>
+	<div class="box-body">
+		<!-- 数据表格 -->
+		<div class="table-box">
+
+			<!--工具栏-->
+			<div class="pull-left">
+				<div class="form-group form-inline">
+					<div class="btn-group">
+						<button type="button" class="btn btn-default" title="新建"
+							data-toggle="modal" data-target="#addModal"
+							ng-click="addBrand={}">
+							<i class="fa fa-file-o"></i> 新建
+						</button>
+						<button type="button" class="btn btn-default" title="删除"
+							ng-click="batchDelete()">
+							<i class="fa fa-trash-o"></i> 删除
+						</button>
+						<button type="button" class="btn btn-default" title="刷新"
+							ng-click="reloadList()">
+							<i class="fa fa-refresh"></i> 刷新
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="box-tools pull-right">
+				<div class="has-feedback">
+					角色名称：<input ng-model="searchBean.roleName" />
+					<button class="btn btn-default" ng-click="reloadList()">查询</button>
+				</div>
+			</div>
+			<!--工具栏/-->
+			<!--数据列表-->
+			<table id="dataList"
+				class="table table-bordered table-striped table-hover dataTable">
+				<thead>
+					<tr>
+						<th class="" style="padding-right: 0px"><input id="selall"
+							type="checkbox" class="icheckbox_square-blue" ng-model="all"
+							ng-click="selAll()"></th>
+						<th class="sorting_asc">角色ID</th>
+						<th class="sorting">角色名称</th>
+						<th class="sorting">角色备注</th>
+						<th class="sorting">更新人</th>
+						<th class="sorting">更改时间</th>
+						<th class="text-center">操作</th>
+						<th class="text-center">操作</th>
+						<th class="text-center">权限</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="role in roleList">
+						<td><input type="checkbox" ng-checked="all"
+							ng-click="updateSelection($event,role.roleId)"></td>
+						<td>{{role.roleId}}</td>
+						<td>{{role.roleName}}</td>
+						<td>{{role.roleDescription}}</td>
+						<td>{{role.updateId}}</td>
+						<td>{{role.updateTime | date:'yyyy-MM-dd hh:mm:ss'}}</td>
+						<td class="text-center">
+							<button type="button" class="btn bg-olive btn-xs"
+								data-toggle="modal" data-target="#editModal"
+								ng-click="showEditPage(role)">修改</button>
+						</td>
+						<td class="text-center">
+							<button type="button" class="btn bg-olive btn-xs"
+								data-toggle="modal" data-target="#give_auth_Modal"
+								ng-click="roleAuthority(role.roleId)">授权</button>
+						</td>
+						<td class="text-center">
+							<button type="button" class="btn bg-olive btn-xs"
+								data-toggle="modal" data-target="#show_auth_Modal"
+								ng-click="showAuthority(role.roleId)">查看</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!--数据列表/-->
+		</div>
+		<!-- 数据表格 /-->
+	</div>
+	<!-- 分页 -->
+	<!--angularjs提供的分页控件-->
+	<tm-pagination conf="paginationConf"></tm-pagination>
+
+	<!-- /.box-body -->
+
+	<!-- <td><select class="form-control" ng-model="" ng-model="addUser.grade">
+									<option value="-1">--请选择--</option>
+									<option ng-repeat="x in s"  value="x.id">x.name</option>
+							</select></td>-->
+	<!-- 新增窗口 -->
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content top">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">新增角色</h3>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered table-striped" width="800px">
+						<tr>
+							<td>角色名称</td>
+							<td><input class="form-control name" placeholder="角色名称"
+								ng-model="addRole.roleName"></td>
+						</tr>
+						<!-- 添加 -->
+						<tr>
+							<td>上级角色</td>
+							<td style="position: relative;"><input id="citySel"
+								class="nameId" type="text" readonly value="" name="111" />
+								&nbsp; <a id="menuBtn" href="#"
+								onclick="showAddMenu(); return false;">选择</a>
+								<div class="idd" style="display: none;"></div>
+								<div id="menuAddContent" class="menuContent"
+									style="display: none;">
+									<ul id="treeDemo" class="ztree"
+										style="margin-top: 0; width: 177px; position: absolute;">
+									</ul>
+								</div></td>
+						</tr>
+						<tr>
+							<td>角色备注</td>
+							<td><textarea class="form-control textareas" rows="5"
+									cols="15" ng-model="addRole.roleDescription"></textarea></td>
+						</tr>
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" data-dismiss="modal"
+						aria-hidden="true" ng-click="save()">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 编辑窗口 -->
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">编辑角色</h3>
+				</div>
+				<div class="modal-body">
+
+					<table class="table table-bordered table-striped" width="800px">
+						<tr>
+							<input class="id2" style="display: none;"
+								ng-model="editRole.roleId" />
+							<td>角色名称</td>
+							<td><input class="form-control name2" value="平台操作员"
+								ng-model="editRole.roleName"></td>
+						</tr>
+						<tr>
+							<td>角色级别</td>
+							<td style="position: relative;"><input id="citySel2"
+								class="nameId2" type="text" readonly value="" name="111" />
+								&nbsp; <a id="menuBtn2" href="#"
+								onclick="showAddMenu2(); return false;">选择</a>
+								<div class="idd2" style="display: none;"></div>
+								<div id="menuAddContent2" class="menuContent"
+									style="display: none;">
+									<ul id="treeDemo2" class="ztree"
+										style="margin-top: 0; width: 177px; position: absolute;">
+									</ul>
+								</div></td>
+						</tr>
+
+						<tr>
+							<td>角色备注</td>
+							<td><textarea class="form-control textareas2” rows="
+									5" cols="15" ng-model="editRole.roleDescription"></textarea>
+						</tr>
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" data-dismiss="modal"
+						aria-hidden="true" ng-click="edit()">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 查看权限项 -->
+	<div class="modal fade" id="show_auth_Modal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">查看权限</h3>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered table-striped" width="800px">
+						<tr>
+							<td>权限名称</td>
+							<td></td>
+						</tr>
+						<tr ng-repeat="authority in showAuthorityList">
+							<td>{{authority.authorityName}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 角色授权 -->
+	<div class="modal fade" id="give_auth_Modal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">角色授权</h3>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered table-striped" width="800px">
+						<tr>
+							<td>权限名称</td>
+						</tr>
+						<tr ng-repeat="authority in authorityList">
+							<td><input type="checkbox" ng-checked="isSelected()"
+								ng-click="updateRoleSelection($event,authority.authorityId)">{{authority.authorityName}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" data-dismiss="modal"
+						aria-hidden="true" ng-click="accredit()">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

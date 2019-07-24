@@ -1,0 +1,55 @@
+产品				tb_product
+产品信息			tb_product_info
+品牌				tb_brand
+商品分类			tb_category
+模板				tb_template
+规格				tb_spec
+选项				tb_spec_option
+
+商品				tb_goods
+图片				tb_image
+库存				tb_stock
+
+订单				tb_order
+子订单				tb_sub_order
+订单明细			tb_order_item
+订单物流表			tb_order_delivery
+订单物流日志表		tb_order_delivery_log
+
+订单退货			tb_return_goods
+订单换货			tb_exchange_goods
+退款单				tb_refund
+
+
+广告				tb_ad
+广告分类			tb_ad_category
+
+
+用户（会员）		tb_member
+收货地址			tb_address
+收藏				tb_collection
+
+商家				(客户)				tb_business
+店铺 				tb_shop
+店铺用户  			tb_shop_user
+
+运营平台用户		tb_sysuser
+
+===============================================================
+id列 采用[表名+“_”+id]  例如 会员id  user_id
+name                      		     user_name
+创建时间    create_time  datetime
+修改时间    update_time  datetime
+创建人      create_id    int(10)
+修改人      update_id    int(10)
+是否删除    is_delete    char(1)
+状态  		status       char(1)
+手机号      mobile	     varchar(15)
+邮箱        emali        varchar(50)
+省			province	 int(10)
+市 			city		 int(10)
+区			area		 int(10)
+邮编	    zipcode		 int(10)
+价格格式    price		 decimal(10,2)
+金钱        money		 decimal(10,2)
+

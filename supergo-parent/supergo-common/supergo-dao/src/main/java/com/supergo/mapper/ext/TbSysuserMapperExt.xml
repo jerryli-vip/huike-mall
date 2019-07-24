@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbSysuserMapperExt">
+	<resultMap id="BaseResultMap" type="com.supergo.pojo.TbSysuser">
+		<id column="sysuser_id" property="sysuserId" jdbcType="INTEGER" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="create_id" property="createId" jdbcType="INTEGER" />
+		<result column="update_id" property="updateId" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="CHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="system_role_id" property="systemRoleId"
+			jdbcType="INTEGER" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="bak3" property="bak3" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="insertUser" parameterType="com.supergo.pojo.TbSysuser">
+		insert into tb_sysuser
+		(userName, password,
+		create_time, last_time, name,
+		create_id, update_id,
+		update_time,
+		is_delete, status,mobile,head_portrait)values
+		(#{userName},
+		#{password},
+		#{createTime}, #{lastTime},
+		#{name},
+		#{createId},
+		#{updateId},
+		#{updateTime},
+		#{isDelete},
+		#{status},#{mobile},#{headPortrait})
+	</insert>
+	<select id="queryAllUser" parameterType="com.supergo.pojo.TbSysuser"
+		resultType="com.supergo.pojo.TbSysuser">
+		select sysuser_id sysuserId, username userName, password, create_time
+		createTime, last_time lastTime, name,create_id createId,update_id
+		updateId, update_time updateTime,is_delete isDelete, status status,
+		system_role_id systemRoleId, mobile
+		from tb_sysuser
+		<where>
+			is_delete = 'N'
+			<if test="userName != null">
+				And username like '%${userName}%'
+			</if>
+		</where>
+	</select>
+	<update id="resetPassword" parameterType="java.util.List">
+		update tb_sysuser set password = "670b14728ad9902aecba32e22fa4f6bd"
+		where sysuser_id in
+		<foreach item="batch_resetPassword_id" collection="list" open="("
+			separator="," close=")">
+			#{batch_resetPassword_id}
+		</foreach>
+	</update>
+
+	<update id="batchdelete" parameterType="java.util.List">
+		update tb_sysuser set is_delete = 'Y' where sysuser_id in
+		<foreach item="batch_delete_id" collection="list" open="("
+			separator="," close=")">
+			#{batch_delete_id}
+		</foreach>
+	</update>
+	<select id="selectByUsername" parameterType="java.lang.String"
+		resultType="java.lang.Long">
+		select count(sysuser_id) from tb_sysuser where username
+		=#{userName} and is_delete = "N"
+	</select>
+	<update id="updateUser" parameterType="com.supergo.pojo.TbSysuser">
+		update tb_sysuser set username = #{userName},name =
+		#{name},head_portrait=#{headPortrait},mobile = #{mobile},update_id
+		=#{updateId},update_time =#{updateTime} where sysuser_id =
+		#{sysuserId}
+	</update>
+	<select id="queryRoleByParentId" parameterType="java.lang.Integer"
+		resultType="com.supergo.pojo.ext.TbRoleExt">
+		select role_id roleId,role_name roleName,type type,grade,parent_id
+		parentId,role_description roleDescription,create_id createId,update_id
+		updateId,create_time createTime,update_time updateTime,is_delete
+		isDelete from tb_role
+		<where>
+			<if test="roleId != null">
+				AND role_id = #{roleId}
+			</if>
+		</where>
+	</select>
+	<select id="queryRole" resultType="com.supergo.pojo.TbRole">
+		select role_id
+		roleId,role_name roleName from tb_role where is_delete = 'N' AND type = #{type} AND grade in (1,2,3)
+	</select>
+
+	<delete id="deleteAllRoleByUserId" parameterType="java.lang.Integer">
+		delete
+		from
+		tb_sysuser_role where sysuser_id = #{userId}
+	</delete>
+
+	<insert id="accreditUser" parameterType="com.supergo.pojo.TbSysuserRole">
+		insert into
+		tb_sysuser_role (sysuser_id,role_id)
+		values(#{sysuserId},#{roleId})
+	</insert>
+	<select id="showRole" parameterType="java.lang.Integer"
+		resultType="com.supergo.pojo.TbRole">
+		select role_name roleName from tb_sysuser_role sr inner
+		join
+		tb_role rl on sr.role_id = rl.role_id where
+		sr.sysuser_id =
+		#{userId}
+	</select>
+	<select id="selectUserByUserName" parameterType="java.lang.String"
+		resultType="com.supergo.pojo.TbSysuser">
+		select sysuser_id sysuserId,username
+		userName,password,create_time createTime ,last_time
+		lastTime,name,create_id createId,update_id updateId,update_time
+		updateTime,is_delete isDelete from tb_sysuser
+		where username =
+		#{username}
+	</select>
+	<select id="queryAuthorityCode" parameterType="java.lang.String"
+		resultType="com.supergo.pojo.TbAuthority">
+		select code from tb_authority ta INNER JOIN
+		tb_role_authority ra on ta.authority_id = ra.authority_id INNER JOIN
+		tb_role tr on ra.role_id = tr.role_id INNER JOIN tb_sysuser_role sr on
+		tr.role_id = sr.role_id INNER JOIN tb_sysuser ts on sr.role_id
+		=ts.sysuser_id where ts.username = #{userName}
+	</select>
+</mapper>

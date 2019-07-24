@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<!-- 页面meta -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>产品管理</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- 加入angularJS -->
+<script src="/plugins/angularjs/angular.min.js"></script>
+<!-- 加入angularjs的pagination模块 -->
+<script src="/plugins/angularjs/pagination.js"></script>
+<link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+
+<!-- 引入基础模块和控制器 -->
+<script src="/js/supergo/base/base_app_pagination.js"></script>
+<script src="/js/supergo/base/base_controller.js"></script>
+<!-- 编写product.js文件 -->
+<script src="/js/supergo/product.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="supergo"
+	ng-controller="productController">
+	<!-- .box-body -->
+
+	<div class="box-header with-border">
+		<h3 class="box-title">产品管理</h3>
+	</div>
+
+	<div class="box-body">
+
+		<!-- 数据表格 -->
+		<div class="table-box">
+
+			<!--工具栏-->
+			<div class="pull-left">
+				<div class="form-group form-inline">
+					<div class="btn-group">
+						<button type="button" class="btn btn-default" title="新建"
+							ng-click="add()">
+							<i class="fa fa-file-o"></i> 新建
+						</button>
+						<button type="button" class="btn btn-default" title="删除"
+							onclick='confirm("你确认要删除吗？")' ng-click="deleteByIds()">
+							<i class="fa fa-trash-o"></i> 删除
+						</button>
+						<button type="button" class="btn btn-default" title="提交审核"
+							onclick='confirm("你确认要提审吗？")' ng-click="auditingByIds()">
+							<i class="fa fa-check"></i> 提交审核
+						</button>
+						<button type="button" class="btn btn-default" title="运费模板"
+							data-toggle="modal" data-target="#freightModal">
+							<i class="fa fa-freight"></i> 运费模板
+						</button>
+						<button type="button" class="btn btn-default" title="刷新"
+							onclick="window.location.reload();">
+							<i class="fa fa-refresh"></i> 刷新
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="box-tools pull-right">
+				<div class="has-feedback">
+					状态：<select ng-model="searchBean.status">
+						<option value="">全部</option>
+						<option value="0">未申请</option>
+						<option value="1">申请中</option>
+						<option value="2">审核通过</option>
+						<option value="3">已驳回</option>
+					</select> 产品名称：<input ng-model="searchBean.productName">
+					<button class="btn btn-default" ng-click="reloadList()">查询</button>
+				</div>
+			</div>
+			<!--工具栏/-->
+
+			<!--数据列表-->
+			<table id="dataList"
+				class="table table-bordered table-striped table-hover dataTable">
+				<thead>
+					<tr>
+						<th class="" style="padding-right: 0px"><input id="selall"
+							type="checkbox" class="icheckbox_square-blue" ng-model="all"
+							ng-click="selAll()"></th>
+						<th class="sorting_asc">产品ID</th>
+						<th class="sorting">产品名称</th>
+						<th class="sorting">一级分类</th>
+						<th class="sorting">二级分类</th>
+						<th class="sorting">三级分类</th>
+						<th class="sorting">状态</th>
+						<th class="text-center">操作</th>
+					</tr>
+				</thead>
+				<fore
+				<tbody>
+					<tr ng-repeat="product in productList">
+						<td><input type="checkbox" ng-checked="all"
+							ng-click="updateSelection($event,product.productId)"></td>
+						<td>{{product.productId}}</td>
+						<td>{{product.productName}}</td>
+						<td>{{product.classify1}}</td>
+						<td>{{product.classify2}}</td>
+						<td>{{product.classify3}}</td>
+						<td><span ng-if="product.status==0"><b>未申请</b></span> <span
+							ng-if="product.status!=0">未申请</span> <span
+							ng-if="product.status==1"><b>申请中</b></span> <span
+							ng-if="product.status!=1">申请中</span> <span
+							ng-if="product.status==2"><b>审核通过</b></span> <span
+							ng-if="product.status!=2">审核通过</span> <span
+							ng-if="product.status==3"><b>已驳回</b></span> <span
+							ng-if="product.status!=3">已驳回</span></td>
+						<td class="text-center">
+							<button type="button" class="btn bg-olive btn-xs"
+								ng-click="edit(product.productId)">修改</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!--数据列表/-->
+
+		</div>
+	</div>
+
+	</div>
+	<!-- 数据表格 /-->
+
+	<!-- angularjs提供的分页控件 -->
+	<tm-pagination conf="paginationConf"></tm-pagination>
+
+	</div>
+	<!-- /.box-body -->
+
+</body>
+
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<!-- 页面meta -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>用户管理</title>
+<meta
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+<!-- 加入angularJS -->
+<script src="/plugins/angularjs/angular.min.js"></script>
+<!-- 加入angularjs的pagination模块 -->
+<script src="/plugins/angularjs/pagination.js"></script>
+<link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+<!-- 引入基础模块和控制器 -->
+<script src="/js/supergo/base/base_app_pagination.js"></script>
+<script src="/js/supergo/base/base_controller.js"></script>
+<!-- 编写systemuser.js文件 -->
+<script src="/js/supergo/systemuser.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="supergo"
+	ng-controller="systemUserController">
+	<!-- .box-body -->
+	<div class="box-header with-border">
+		<h3 class="box-title">用户管理</h3>
+	</div>
+	<div class="box-body">
+		<!-- 数据表格 -->
+		<div class="table-box">
+
+			<!--工具栏-->
+			<div class="pull-left">
+				<div class="form-group form-inline">
+					<div class="btn-group">
+						<!-- addBrand={}的作用是清空数据 -->
+						<button type="button" class="btn btn-default" title="新建"
+							data-toggle="modal" data-target="#addModal"
+							ng-click="addBrand={}">
+							<i class="fa fa-file-o"></i> 新建
+						</button>
+						<button type="button" class="btn btn-default" title="删除"
+							ng-click="batchDelete()">
+							<i class="fa fa-trash-o"></i> 删除
+						</button>
+						<button type="button" class="btn btn-default" title="重置密码"
+							ng-click="resetPassword()">
+							<i class="fa fa-trash-o"></i> 重置密码
+						</button>
+						<button type="button" class="btn btn-default" title="刷新"
+							ng-click="reloadList()">
+							<i class="fa fa-refresh"></i> 刷新
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="box-tools pull-right">
+				<div class="has-feedback">
+					用户名称：<input ng-model="searchBean.userName" />
+					<button class="btn btn-default" ng-click="reloadList()">查询</button>
+				</div>
+			</div>
+			<!--工具栏/-->
+			<!--数据列表-->
+			<table id="dataList"
+				class="table table-bordered table-striped table-hover dataTable">
+				<thead>
+					<tr>
+						<th class="" style="padding-right: 0px"><input id="selall"
+							type="checkbox" class="icheckbox_square-blue" ng-model="all"
+							ng-click="selAll()"></th>
+						<th class="sorting_asc">用户ID</th>
+						<th class="sorting">用户名称</th>
+						<th class="sorting">用户入职时间</th>
+						<th class="sorting">更新人</th>
+						<th class="sorting">更改时间</th>
+						<th class="text-center">操作</th>
+						<th class="text-center">操作</th>
+						<th class="text-center">职务</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="systemUser in systemUserList">
+						<td><input type="checkbox" ng-checked="all"
+							ng-click="updateSelection($event,systemUser.sysuserId)"></td>
+						<td>{{systemUser.sysuserId}}</td>
+						<td>{{systemUser.userName}}</td>
+						<td>{{systemUser.createTime | date:'yyyy-MM-dd hh:mm:ss'}}</td>
+						<td>{{systemUser.updateId}}</td>
+						<td>{{systemUser.updateTime | date:'yyyy-MM-dd hh:mm:ss'}}</td>
+						<td class="text-center">
+							<button type="button" class="btn bg-olive btn-xs"
+								data-toggle="modal" data-target="#editModal"
+								ng-click="showEditPage(systemUser)">修改</button>
+						</td>
+						<td class="text-center">
+							<button type="button" class="btn bg-olive btn-xs"
+								data-toggle="modal" data-target="#giveroleModal"
+								ng-click="userAuthority(systemUser.sysuserId)">授权</button>
+						</td>
+						<td class="text-center">
+							<button type="button" class="btn bg-olive btn-xs"
+								data-toggle="modal" data-target="#rolesModal"
+								ng-click="showRole(systemUser.sysuserId)">查看</button>
+						</td>
+				</tbody>
+			</table>
+			<!--数据列表/-->
+		</div>
+		<!-- 数据表格 /-->
+	</div>
+
+	<!-- 分页 -->
+	<!--angularjs提供的分页控件-->
+	<tm-pagination conf="paginationConf"></tm-pagination>
+
+
+	<!-- /.box-body -->
+
+
+	<!-- 新增窗口 -->
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">新增用户</h3>
+				</div>
+				<div class="modal-body">
+
+					<table class="table table-bordered table-striped" width="800px">
+						<tr>
+							<td>中文名称</td>
+							<td><input class="form-control" placeholder="中文名称"
+								ng-model="addUser.name"></td>
+						</tr>
+						<tr>
+							<td>用户名称</td>
+							<td><input class="form-control" placeholder="用户名称"
+								ng-model="addUser.userName"></td>
+						</tr>
+						<tr>
+							<td>头像上传</td>
+							<td>
+								<table>
+									<tr>
+										<td><input type="file" id="file1" />
+											<button class="btn btn-primary" type="button"
+												ng-click="uploadFile()">上传</button></td>
+									</tr>
+									<tr>
+										<td><img src="{{addUser.headPortrait}}" width="200px"
+											height="100px"> <input type="hidden"
+											ng-model="addUser.headPortrait" /></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>用户密码</td>
+							<td><input class="form-control" type="password"
+								placeholder="用户密码" ng-model="addUser.password"></td>
+						</tr>
+						<tr>
+							<td>确认用户密码</td>
+							<td><input class="form-control" type="password"
+								placeholder="确认用户密码" ng-model="addUser.cfmPassword"></td>
+						</tr>
+						<tr>
+							<td>手机号</td>
+							<td><input class="form-control" placeholder="手机号"
+								ng-model="addUser.mobile"></td>
+						</tr>
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" data-dismiss="modal"
+						aria-hidden="true" ng-click="save()">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 编辑窗口 -->
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">修改用户</h3>
+				</div>
+				<div class="modal-body">
+
+					<table class="table table-bordered table-striped" width="800px">
+						<tr>
+							<td><input class="form-control" placeholder="用户ID"
+								type="hidden" ng-model="editUser.UserId" /></td>
+						</tr>
+						<tr ng-model="ww">
+							<td>中文名称</td>
+							<td><input class="form-control" ng-model="editUser.name"></td>
+						</tr>
+						<tr>
+							<td>用户名称</td>
+							<td><input class="form-control" ng-model="editUser.userName"></td>
+						</tr>
+						<tr>
+							<td>头像上传</td>
+							<td>
+								<table>
+									<tr>
+										<td><input type="file" id="file2" />
+											<button class="btn btn-primary" type="button"
+												ng-click="uploadFile1()">上传</button></td>
+									</tr>
+									<tr>
+										<td><img src="{{editUser.headPortrait}}" width="200px"
+											height="100px"> <input type="hidden"
+											ng-model="editUser.headPortrait" /></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>手机号</td>
+							<td><input class="form-control" ng-model="editUser.mobile"></td>
+						</tr>
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button ng-click="edit()" class="btn btn-success"
+						data-dismiss="modal" aria-hidden="true">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 查看职务项 -->
+	<div class="modal fade" id="rolesModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">查看角色</h3>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered table-striped" width="800px">
+						<tr>
+							<td>角色名称</td>
+							<td></td>
+						</tr>
+						<tr ng-repeat="role in showRoleList">
+							<td>{{role.roleName}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" data-dismiss="modal"
+						aria-hidden="true">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 职务项 -->
+	<div class="modal fade" id="giveroleModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">用户授权</h3>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered table-striped" width="800px">
+						<tr>
+							<td>角色名称</td>
+						</tr>
+						<tr ng-repeat="role in roleList">
+							<td><input type="checkbox"
+								ng-checked="isSelected(systemUser.sysuserId)"
+								ng-click="updateRoleSelection($event,role.roleId)">{{role.roleName}}</td>
+						</tr>
+					</table>
+					<div class="modal-footer">
+						<button class="btn btn-success" data-dismiss="modal"
+							aria-hidden="true" ng-click="accredit()">保存</button>
+						<button class="btn btn-default" data-dismiss="modal"
+							aria-hidden="true">关闭</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

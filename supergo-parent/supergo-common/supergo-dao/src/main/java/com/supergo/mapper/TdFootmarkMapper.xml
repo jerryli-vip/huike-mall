@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.TdFootmarkMapper" >
+  <resultMap id="BaseResultMap" type="com.supergo.pojo.TdFootmark" >
+    <id column="footmark_id" property="footmarkId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_id" property="createId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="uodate_id" property="uodateId" jdbcType="CHAR" />
+    <result column="udpate_time" property="udpateTime" jdbcType="TIMESTAMP" />
+    <result column="footmark_deletet" property="footmarkDeletet" jdbcType="VARCHAR" />
+    <result column="footmark_remaks1" property="footmarkRemaks1" jdbcType="CHAR" />
+    <result column="footmark_remaks2" property="footmarkRemaks2" jdbcType="CHAR" />
+    <result column="footmark_remaks3" property="footmarkRemaks3" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    footmark_id, user_id, product_id, price, introduce, status, create_id, create_time, 
+    uodate_id, udpate_time, footmark_deletet, footmark_remaks1, footmark_remaks2, footmark_remaks3
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.supergo.pojo.TdFootmarkExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from td_footmark
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from td_footmark
+    where footmark_id = #{footmarkId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from td_footmark
+    where footmark_id = #{footmarkId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.supergo.pojo.TdFootmarkExample" >
+    delete from td_footmark
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.supergo.pojo.TdFootmark" >
+    insert into td_footmark (footmark_id, user_id, product_id, 
+      price, introduce, status, 
+      create_id, create_time, uodate_id, 
+      udpate_time, footmark_deletet, footmark_remaks1, 
+      footmark_remaks2, footmark_remaks3)
+    values (#{footmarkId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL}, #{introduce,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+      #{createId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{uodateId,jdbcType=CHAR}, 
+      #{udpateTime,jdbcType=TIMESTAMP}, #{footmarkDeletet,jdbcType=VARCHAR}, #{footmarkRemaks1,jdbcType=CHAR}, 
+      #{footmarkRemaks2,jdbcType=CHAR}, #{footmarkRemaks3,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supergo.pojo.TdFootmark" >
+    insert into td_footmark
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="footmarkId != null" >
+        footmark_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="introduce != null" >
+        introduce,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="uodateId != null" >
+        uodate_id,
+      </if>
+      <if test="udpateTime != null" >
+        udpate_time,
+      </if>
+      <if test="footmarkDeletet != null" >
+        footmark_deletet,
+      </if>
+      <if test="footmarkRemaks1 != null" >
+        footmark_remaks1,
+      </if>
+      <if test="footmarkRemaks2 != null" >
+        footmark_remaks2,
+      </if>
+      <if test="footmarkRemaks3 != null" >
+        footmark_remaks3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="footmarkId != null" >
+        #{footmarkId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="introduce != null" >
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uodateId != null" >
+        #{uodateId,jdbcType=CHAR},
+      </if>
+      <if test="udpateTime != null" >
+        #{udpateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="footmarkDeletet != null" >
+        #{footmarkDeletet,jdbcType=VARCHAR},
+      </if>
+      <if test="footmarkRemaks1 != null" >
+        #{footmarkRemaks1,jdbcType=CHAR},
+      </if>
+      <if test="footmarkRemaks2 != null" >
+        #{footmarkRemaks2,jdbcType=CHAR},
+      </if>
+      <if test="footmarkRemaks3 != null" >
+        #{footmarkRemaks3,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.supergo.pojo.TdFootmarkExample" resultType="java.lang.Integer" >
+    select count(*) from td_footmark
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update td_footmark
+    <set >
+      <if test="record.footmarkId != null" >
+        footmark_id = #{record.footmarkId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.introduce != null" >
+        introduce = #{record.introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=CHAR},
+      </if>
+      <if test="record.createId != null" >
+        create_id = #{record.createId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.uodateId != null" >
+        uodate_id = #{record.uodateId,jdbcType=CHAR},
+      </if>
+      <if test="record.udpateTime != null" >
+        udpate_time = #{record.udpateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.footmarkDeletet != null" >
+        footmark_deletet = #{record.footmarkDeletet,jdbcType=VARCHAR},
+      </if>
+      <if test="record.footmarkRemaks1 != null" >
+        footmark_remaks1 = #{record.footmarkRemaks1,jdbcType=CHAR},
+      </if>
+      <if test="record.footmarkRemaks2 != null" >
+        footmark_remaks2 = #{record.footmarkRemaks2,jdbcType=CHAR},
+      </if>
+      <if test="record.footmarkRemaks3 != null" >
+        footmark_remaks3 = #{record.footmarkRemaks3,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update td_footmark
+    set footmark_id = #{record.footmarkId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      introduce = #{record.introduce,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=CHAR},
+      create_id = #{record.createId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      uodate_id = #{record.uodateId,jdbcType=CHAR},
+      udpate_time = #{record.udpateTime,jdbcType=TIMESTAMP},
+      footmark_deletet = #{record.footmarkDeletet,jdbcType=VARCHAR},
+      footmark_remaks1 = #{record.footmarkRemaks1,jdbcType=CHAR},
+      footmark_remaks2 = #{record.footmarkRemaks2,jdbcType=CHAR},
+      footmark_remaks3 = #{record.footmarkRemaks3,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supergo.pojo.TdFootmark" >
+    update td_footmark
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uodateId != null" >
+        uodate_id = #{uodateId,jdbcType=CHAR},
+      </if>
+      <if test="udpateTime != null" >
+        udpate_time = #{udpateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="footmarkDeletet != null" >
+        footmark_deletet = #{footmarkDeletet,jdbcType=VARCHAR},
+      </if>
+      <if test="footmarkRemaks1 != null" >
+        footmark_remaks1 = #{footmarkRemaks1,jdbcType=CHAR},
+      </if>
+      <if test="footmarkRemaks2 != null" >
+        footmark_remaks2 = #{footmarkRemaks2,jdbcType=CHAR},
+      </if>
+      <if test="footmarkRemaks3 != null" >
+        footmark_remaks3 = #{footmarkRemaks3,jdbcType=CHAR},
+      </if>
+    </set>
+    where footmark_id = #{footmarkId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supergo.pojo.TdFootmark" >
+    update td_footmark
+    set user_id = #{userId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      create_id = #{createId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      uodate_id = #{uodateId,jdbcType=CHAR},
+      udpate_time = #{udpateTime,jdbcType=TIMESTAMP},
+      footmark_deletet = #{footmarkDeletet,jdbcType=VARCHAR},
+      footmark_remaks1 = #{footmarkRemaks1,jdbcType=CHAR},
+      footmark_remaks2 = #{footmarkRemaks2,jdbcType=CHAR},
+      footmark_remaks3 = #{footmarkRemaks3,jdbcType=CHAR}
+    where footmark_id = #{footmarkId,jdbcType=INTEGER}
+  </update>
+</mapper>

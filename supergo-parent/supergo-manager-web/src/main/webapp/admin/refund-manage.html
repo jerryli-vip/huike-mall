@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>退款单管理</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../plugins/laydate/laydate.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" >
+  <!-- .box-body -->
+                
+                    <div class="box-header with-border">
+                        <h3 class="box-title">退款单管理</h3>
+                    </div>
+
+                    <div class="box-body">
+
+                        <!-- 数据表格 -->
+                        <div class="table-box">
+
+                            <!--工具栏-->
+                            <div class="pull-left">
+                                <div class="form-group form-inline">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default" title="退款成功" ><i class="fa fa-file-o"></i>退款成功</button>
+                                        <button type="button" class="btn btn-default" title="退款失败" ><i class="fa fa-trash-o"></i> 退款失败</button>
+                                        <button type="button" class="btn btn-default" title="取消退款" ><i class="fa fa-check"></i>取消退款</button>
+                                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-tools pull-right">
+                                <div class="has-feedback">
+                                  退款单状态：<select>
+                                         	<option value="">全部</option>      
+                                         	<option value="0">退款处理中</option>    
+                                         	<option value="1">退款成功</option>    
+                                         	<option value="2">退款失败</option>    
+                                         	<option value="3">取消退款</option>                                     
+                                        </select>
+											  订单号：<input >	
+											  退款单：<input >
+											  退款时间：<input type="text" class="demo-input" id="test10">
+											  
+									<button class="btn btn-default" >查询</button>                                    
+                                </div>
+							</div>
+							<script>
+								lay('#version').html('-v'+ laydate.v);
+								//执行一个laydate实例
+								laydate.render({
+									elem: '#test10'
+									,type: 'datetime'
+									,range: true
+								  }); 
+							</script>
+                            <!--工具栏/-->
+
+			                  <!--数据列表-->
+			                  <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+			                      <thead>
+			                          <tr>
+			                              <th class="" style="padding-right:0px">
+			                                  <input id="selall" type="checkbox" class="icheckbox_square-blue">
+			                              </th> 
+										  <th class="sorting_asc">退款单号</th>
+										  <th class="sorting">退货单号</th>
+										  <th class="sorting">订单号</th>
+										  <th class="sorting">主订单号</th>
+									      <th class="sorting">收货人</th>
+									      <th class="sorting">联系方式</th>
+										  <th class="sorting">审核状态</th>
+									      <th class="sorting">申请时间</th>
+									      <th class="sorting">退货状态</th>
+									      <th class="sorting">退货更新时间</th>	
+										  <th class="sorting">供应商名称</th>
+										  <th class="text-center">操作</th>
+			                          </tr>
+			                      </thead>
+			                      <tbody>
+			                          <tr>
+									  <td><input  type="checkbox"></td>			                              
+									  <td> <a data-toggle="modal" data-target="#showModal" />12564</td>
+									  <td>8000296</td>
+									  <td>2016110314430470</td>
+									  <td>2016110314430470</td>
+									  <td>雷军</td>
+									  <td>18848985868</td>
+									  <td>审核通过</td>
+									  <td>2018-05-09 21:03:03</td>
+									  <td>退货寄回</td>
+									  <td>2018-05-09 21:03:03</td>
+									  <td>鑫飞盛机电</td>
+									  <td> <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" >修改</button></td>
+
+			                          </tr>
+									  <tr>
+									  <td><input  type="checkbox"></td>			                              
+									  <td><a data-toggle="modal" data-target="#showModal" />12564</td>
+									  <td>8000296</td>
+									  <td>2016110314430470</td>
+									  <td>2016110314430470</td>
+									  <td>雷军</td>
+									  <td>18848985868</td>
+									  <td>审核通过</td>
+									  <td>2018-05-09 21:03:03</td>
+									  <td>退货成功</td>
+									  <td>2018-05-09 21:03:03</td>
+									  <td>鑫飞盛机电</td>
+									  <td> <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" >修改</button></td>
+
+			                          </tr>
+			                      </tbody>
+			                  </table>
+							  <!--数据列表/-->  
+							  
+				<!-- 订单详情-->
+<div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" >
+		  <div class="modal-content">
+			  <div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				  <h3 id="myModalLabel">订单详情</h3>
+			  </div>
+			  <div class="modal-body">							
+				   
+				   
+				   
+				   <table class="table table-bordered table-striped table-hover dataTable">
+						  <thead>
+							  <tr>
+								
+						   
+							<th class="sorting">订单详情</th>
+								
+						  </thead>
+						  <tbody>
+								<tr>
+										<td>退款单号</td>
+										<td> 2016110314430471</td>
+	
+										<td>退货单号 </td>
+			
+										<td>2016110314430470</td>
+										
+								   
+								  </tr>
+								  <tr>
+										<td>订单号</td>
+										<td> </td>
+										<td>主订单号</td>
+										<td>  </td>
+								  </tr>
+								  <tr>
+										<td>收货人</td>
+										<td> </td>
+										<td>联系方式</td>
+										<td> </td>
+									</tr>
+								<tr>
+										<td>审核状态</td>
+										<td>  </td>
+							
+										<td>申请时间</td>
+										<td> </td>
+									</tr>
+									<tr>
+										<td>退货状态</td>
+										<td>  </td>
+								 
+										<td>退货更新时间</td>
+										<td> </td>
+									</tr>
+	
+									<tr>
+										<td>供应商名称</td>
+										<td>  </td>
+								  
+										
+								  </tr>
+	
+	
+	
+							
+						  </tbody>
+					</table> 
+				  
+				  
+			  </div>
+			  <div class="modal-footer">						
+				  <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+				  <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+			  </div>
+			</div>
+		  </div>
+	  </div>
+	
+	
+	
+				  
+
+
+
+
+
+
+
+
+
+
+							<!-- 修改订单 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" >
+		  <div class="modal-content">
+			  <div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				  <h3 id="myModalLabel">修改退款单</h3>
+			  </div>
+			  <div class="modal-body">							
+				   
+				   
+				   
+				   <table class="table table-bordered table-striped table-hover dataTable">
+						  <thead>
+							 
+								
+						   
+							<th class="sorting">修改退款单</th>
+								
+						  </thead>
+						  <tbody>
+								
+									<tr>
+										<td>审核状态</td>
+										<td><input  class="form-control" placeholder="审核状态" >  </td>
+									</tr>
+									<tr>
+										<td>申请时间</td>
+										<td><input  class="form-control" placeholder="申请时间" >  </td>
+									</tr>
+									<tr>
+											<td>退货状态</td>
+											<td><input  class="form-control" placeholder="退货状态" >  </td>
+										</tr>
+										<tr>
+										<td>退货更新时间</td>
+										<td><input  class="form-control" placeholder="退货更新时间" >  </td>
+											</tr>
+											<tr>
+											
+							
+						  </tbody>
+					</table> 
+				  
+				  
+			  </div>
+			  <div class="modal-footer">						
+				  <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+				  <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+			  </div>
+			</div>
+		  </div>
+	  </div>  
+	
+	  
+							 
+                        </div>
+                        <!-- 数据表格 /-->
+                        
+                        
+                     </div>
+                    <!-- /.box-body -->
+		
+</body>
+
+</html>

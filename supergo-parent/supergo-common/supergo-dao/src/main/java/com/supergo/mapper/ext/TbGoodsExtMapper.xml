@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbGoodsExtMapper">
+
+	<insert id="insert" parameterType="com.supergo.pojo.TbGoods">
+		<!-- selectKey将主键返回，需要再返回 -->
+		<selectKey keyProperty="goodsId" order="AFTER" resultType="java.lang.Integer">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into tb_goods
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="goodsName != null">
+				goods_name,
+			</if>
+			<if test="productId != null">
+				product_id,
+			</if>
+			<if test="shopId != null">
+				shop_id,
+			</if>
+			<if test="costPrice != null">
+				cost_price,
+			</if>
+			<if test="sellPrice != null">
+				sell_price,
+			</if>
+			<if test="inventory != null">
+				inventory,
+			</if>
+			<if test="isSpecification != null">
+				is_specification,
+			</if>
+			<if test="specInfo != null">
+				spec_info,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="isPutaway != null">
+				is_putaway,
+			</if>
+			<if test="createId != null">
+				create_id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateId != null">
+				update_id,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="goodsName != null">
+				#{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="productId != null">
+				#{productId,jdbcType=INTEGER},
+			</if>
+			<if test="shopId != null">
+				#{shopId,jdbcType=INTEGER},
+			</if>
+			<if test="costPrice != null">
+				#{costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="sellPrice != null">
+				#{sellPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="inventory != null">
+				#{inventory,jdbcType=INTEGER},
+			</if>
+			<if test="isSpecification != null">
+				#{isSpecification,jdbcType=CHAR},
+			</if>
+			<if test="specInfo != null">
+				#{specInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="isPutaway != null">
+				#{isPutaway,jdbcType=CHAR},
+			</if>
+			<if test="createId != null">
+				#{createId,jdbcType=CHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateId != null">
+				#{updateId,jdbcType=CHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=CHAR},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

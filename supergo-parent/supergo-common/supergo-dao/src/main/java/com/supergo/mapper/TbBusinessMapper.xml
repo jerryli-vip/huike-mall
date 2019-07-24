@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.TbBusinessMapper" >
+  <resultMap id="BaseResultMap" type="com.supergo.pojo.TbBusiness" >
+    <id column="business_id" property="businessId" jdbcType="INTEGER" />
+    <result column="default_shop_id" property="defaultShopId" jdbcType="INTEGER" />
+    <result column="default_shop_name" property="defaultShopName" jdbcType="VARCHAR" />
+    <result column="business_status" property="businessStatus" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="comp_name" property="compName" jdbcType="VARCHAR" />
+    <result column="comp_mobile" property="compMobile" jdbcType="VARCHAR" />
+    <result column="comp_phone" property="compPhone" jdbcType="VARCHAR" />
+    <result column="comp_address" property="compAddress" jdbcType="VARCHAR" />
+    <result column="con_name" property="conName" jdbcType="VARCHAR" />
+    <result column="con_qq" property="conQq" jdbcType="VARCHAR" />
+    <result column="con_mobile" property="conMobile" jdbcType="VARCHAR" />
+    <result column="con_email" property="conEmail" jdbcType="VARCHAR" />
+    <result column="license_num" property="licenseNum" jdbcType="VARCHAR" />
+    <result column="taxregist_num" property="taxregistNum" jdbcType="VARCHAR" />
+    <result column="organ_num" property="organNum" jdbcType="VARCHAR" />
+    <result column="legal" property="legal" jdbcType="VARCHAR" />
+    <result column="legal_indentity" property="legalIndentity" jdbcType="VARCHAR" />
+    <result column="openbank" property="openbank" jdbcType="VARCHAR" />
+    <result column="ob_branch" property="obBranch" jdbcType="VARCHAR" />
+    <result column="bank_num" property="bankNum" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="bak1" property="bak1" jdbcType="VARCHAR" />
+    <result column="bak2" property="bak2" jdbcType="VARCHAR" />
+    <result column="bak3" property="bak3" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    business_id, default_shop_id, default_shop_name, business_status, phone, email, comp_name, 
+    comp_mobile, comp_phone, comp_address, con_name, con_qq, con_mobile, con_email, license_num, 
+    taxregist_num, organ_num, legal, legal_indentity, openbank, ob_branch, bank_num, 
+    createid, createtime, update_user, update_time, is_delete, status, bak1, bak2, bak3
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.supergo.pojo.TbBusinessExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_business
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_business
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_business
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.supergo.pojo.TbBusinessExample" >
+    delete from tb_business
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.supergo.pojo.TbBusiness" >
+    insert into tb_business (business_id, default_shop_id, default_shop_name, 
+      business_status, phone, email, 
+      comp_name, comp_mobile, comp_phone, 
+      comp_address, con_name, con_qq, 
+      con_mobile, con_email, license_num, 
+      taxregist_num, organ_num, legal, 
+      legal_indentity, openbank, ob_branch, 
+      bank_num, createid, createtime, 
+      update_user, update_time, is_delete, 
+      status, bak1, bak2, bak3
+      )
+    values (#{businessId,jdbcType=INTEGER}, #{defaultShopId,jdbcType=INTEGER}, #{defaultShopName,jdbcType=VARCHAR}, 
+      #{businessStatus,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{compName,jdbcType=VARCHAR}, #{compMobile,jdbcType=VARCHAR}, #{compPhone,jdbcType=VARCHAR}, 
+      #{compAddress,jdbcType=VARCHAR}, #{conName,jdbcType=VARCHAR}, #{conQq,jdbcType=VARCHAR}, 
+      #{conMobile,jdbcType=VARCHAR}, #{conEmail,jdbcType=VARCHAR}, #{licenseNum,jdbcType=VARCHAR}, 
+      #{taxregistNum,jdbcType=VARCHAR}, #{organNum,jdbcType=VARCHAR}, #{legal,jdbcType=VARCHAR}, 
+      #{legalIndentity,jdbcType=VARCHAR}, #{openbank,jdbcType=VARCHAR}, #{obBranch,jdbcType=VARCHAR}, 
+      #{bankNum,jdbcType=VARCHAR}, #{createid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=CHAR}, 
+      #{status,jdbcType=CHAR}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, #{bak3,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.supergo.pojo.TbBusiness" >
+    insert into tb_business
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="defaultShopId != null" >
+        default_shop_id,
+      </if>
+      <if test="defaultShopName != null" >
+        default_shop_name,
+      </if>
+      <if test="businessStatus != null" >
+        business_status,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="compName != null" >
+        comp_name,
+      </if>
+      <if test="compMobile != null" >
+        comp_mobile,
+      </if>
+      <if test="compPhone != null" >
+        comp_phone,
+      </if>
+      <if test="compAddress != null" >
+        comp_address,
+      </if>
+      <if test="conName != null" >
+        con_name,
+      </if>
+      <if test="conQq != null" >
+        con_qq,
+      </if>
+      <if test="conMobile != null" >
+        con_mobile,
+      </if>
+      <if test="conEmail != null" >
+        con_email,
+      </if>
+      <if test="licenseNum != null" >
+        license_num,
+      </if>
+      <if test="taxregistNum != null" >
+        taxregist_num,
+      </if>
+      <if test="organNum != null" >
+        organ_num,
+      </if>
+      <if test="legal != null" >
+        legal,
+      </if>
+      <if test="legalIndentity != null" >
+        legal_indentity,
+      </if>
+      <if test="openbank != null" >
+        openbank,
+      </if>
+      <if test="obBranch != null" >
+        ob_branch,
+      </if>
+      <if test="bankNum != null" >
+        bank_num,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="bak1 != null" >
+        bak1,
+      </if>
+      <if test="bak2 != null" >
+        bak2,
+      </if>
+      <if test="bak3 != null" >
+        bak3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="businessId != null" >
+        #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="defaultShopId != null" >
+        #{defaultShopId,jdbcType=INTEGER},
+      </if>
+      <if test="defaultShopName != null" >
+        #{defaultShopName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessStatus != null" >
+        #{businessStatus,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="compName != null" >
+        #{compName,jdbcType=VARCHAR},
+      </if>
+      <if test="compMobile != null" >
+        #{compMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="compPhone != null" >
+        #{compPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="compAddress != null" >
+        #{compAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="conName != null" >
+        #{conName,jdbcType=VARCHAR},
+      </if>
+      <if test="conQq != null" >
+        #{conQq,jdbcType=VARCHAR},
+      </if>
+      <if test="conMobile != null" >
+        #{conMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="conEmail != null" >
+        #{conEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseNum != null" >
+        #{licenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="taxregistNum != null" >
+        #{taxregistNum,jdbcType=VARCHAR},
+      </if>
+      <if test="organNum != null" >
+        #{organNum,jdbcType=VARCHAR},
+      </if>
+      <if test="legal != null" >
+        #{legal,jdbcType=VARCHAR},
+      </if>
+      <if test="legalIndentity != null" >
+        #{legalIndentity,jdbcType=VARCHAR},
+      </if>
+      <if test="openbank != null" >
+        #{openbank,jdbcType=VARCHAR},
+      </if>
+      <if test="obBranch != null" >
+        #{obBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNum != null" >
+        #{bankNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createid != null" >
+        #{createid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="bak1 != null" >
+        #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null" >
+        #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null" >
+        #{bak3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.supergo.pojo.TbBusinessExample" resultType="java.lang.Integer" >
+    select count(*) from tb_business
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_business
+    <set >
+      <if test="record.businessId != null" >
+        business_id = #{record.businessId,jdbcType=INTEGER},
+      </if>
+      <if test="record.defaultShopId != null" >
+        default_shop_id = #{record.defaultShopId,jdbcType=INTEGER},
+      </if>
+      <if test="record.defaultShopName != null" >
+        default_shop_name = #{record.defaultShopName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessStatus != null" >
+        business_status = #{record.businessStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.compName != null" >
+        comp_name = #{record.compName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.compMobile != null" >
+        comp_mobile = #{record.compMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.compPhone != null" >
+        comp_phone = #{record.compPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.compAddress != null" >
+        comp_address = #{record.compAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conName != null" >
+        con_name = #{record.conName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conQq != null" >
+        con_qq = #{record.conQq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conMobile != null" >
+        con_mobile = #{record.conMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conEmail != null" >
+        con_email = #{record.conEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.licenseNum != null" >
+        license_num = #{record.licenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taxregistNum != null" >
+        taxregist_num = #{record.taxregistNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organNum != null" >
+        organ_num = #{record.organNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legal != null" >
+        legal = #{record.legal,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legalIndentity != null" >
+        legal_indentity = #{record.legalIndentity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openbank != null" >
+        openbank = #{record.openbank,jdbcType=VARCHAR},
+      </if>
+      <if test="record.obBranch != null" >
+        ob_branch = #{record.obBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankNum != null" >
+        bank_num = #{record.bankNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createid != null" >
+        createid = #{record.createid,jdbcType=INTEGER},
+      </if>
+      <if test="record.createtime != null" >
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUser != null" >
+        update_user = #{record.updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=CHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=CHAR},
+      </if>
+      <if test="record.bak1 != null" >
+        bak1 = #{record.bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bak2 != null" >
+        bak2 = #{record.bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bak3 != null" >
+        bak3 = #{record.bak3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_business
+    set business_id = #{record.businessId,jdbcType=INTEGER},
+      default_shop_id = #{record.defaultShopId,jdbcType=INTEGER},
+      default_shop_name = #{record.defaultShopName,jdbcType=VARCHAR},
+      business_status = #{record.businessStatus,jdbcType=INTEGER},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      comp_name = #{record.compName,jdbcType=VARCHAR},
+      comp_mobile = #{record.compMobile,jdbcType=VARCHAR},
+      comp_phone = #{record.compPhone,jdbcType=VARCHAR},
+      comp_address = #{record.compAddress,jdbcType=VARCHAR},
+      con_name = #{record.conName,jdbcType=VARCHAR},
+      con_qq = #{record.conQq,jdbcType=VARCHAR},
+      con_mobile = #{record.conMobile,jdbcType=VARCHAR},
+      con_email = #{record.conEmail,jdbcType=VARCHAR},
+      license_num = #{record.licenseNum,jdbcType=VARCHAR},
+      taxregist_num = #{record.taxregistNum,jdbcType=VARCHAR},
+      organ_num = #{record.organNum,jdbcType=VARCHAR},
+      legal = #{record.legal,jdbcType=VARCHAR},
+      legal_indentity = #{record.legalIndentity,jdbcType=VARCHAR},
+      openbank = #{record.openbank,jdbcType=VARCHAR},
+      ob_branch = #{record.obBranch,jdbcType=VARCHAR},
+      bank_num = #{record.bankNum,jdbcType=VARCHAR},
+      createid = #{record.createid,jdbcType=INTEGER},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=CHAR},
+      status = #{record.status,jdbcType=CHAR},
+      bak1 = #{record.bak1,jdbcType=VARCHAR},
+      bak2 = #{record.bak2,jdbcType=VARCHAR},
+      bak3 = #{record.bak3,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supergo.pojo.TbBusiness" >
+    update tb_business
+    <set >
+      <if test="defaultShopId != null" >
+        default_shop_id = #{defaultShopId,jdbcType=INTEGER},
+      </if>
+      <if test="defaultShopName != null" >
+        default_shop_name = #{defaultShopName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessStatus != null" >
+        business_status = #{businessStatus,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="compName != null" >
+        comp_name = #{compName,jdbcType=VARCHAR},
+      </if>
+      <if test="compMobile != null" >
+        comp_mobile = #{compMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="compPhone != null" >
+        comp_phone = #{compPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="compAddress != null" >
+        comp_address = #{compAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="conName != null" >
+        con_name = #{conName,jdbcType=VARCHAR},
+      </if>
+      <if test="conQq != null" >
+        con_qq = #{conQq,jdbcType=VARCHAR},
+      </if>
+      <if test="conMobile != null" >
+        con_mobile = #{conMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="conEmail != null" >
+        con_email = #{conEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseNum != null" >
+        license_num = #{licenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="taxregistNum != null" >
+        taxregist_num = #{taxregistNum,jdbcType=VARCHAR},
+      </if>
+      <if test="organNum != null" >
+        organ_num = #{organNum,jdbcType=VARCHAR},
+      </if>
+      <if test="legal != null" >
+        legal = #{legal,jdbcType=VARCHAR},
+      </if>
+      <if test="legalIndentity != null" >
+        legal_indentity = #{legalIndentity,jdbcType=VARCHAR},
+      </if>
+      <if test="openbank != null" >
+        openbank = #{openbank,jdbcType=VARCHAR},
+      </if>
+      <if test="obBranch != null" >
+        ob_branch = #{obBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNum != null" >
+        bank_num = #{bankNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createid != null" >
+        createid = #{createid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="bak1 != null" >
+        bak1 = #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null" >
+        bak2 = #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null" >
+        bak3 = #{bak3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supergo.pojo.TbBusiness" >
+    update tb_business
+    set default_shop_id = #{defaultShopId,jdbcType=INTEGER},
+      default_shop_name = #{defaultShopName,jdbcType=VARCHAR},
+      business_status = #{businessStatus,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      comp_name = #{compName,jdbcType=VARCHAR},
+      comp_mobile = #{compMobile,jdbcType=VARCHAR},
+      comp_phone = #{compPhone,jdbcType=VARCHAR},
+      comp_address = #{compAddress,jdbcType=VARCHAR},
+      con_name = #{conName,jdbcType=VARCHAR},
+      con_qq = #{conQq,jdbcType=VARCHAR},
+      con_mobile = #{conMobile,jdbcType=VARCHAR},
+      con_email = #{conEmail,jdbcType=VARCHAR},
+      license_num = #{licenseNum,jdbcType=VARCHAR},
+      taxregist_num = #{taxregistNum,jdbcType=VARCHAR},
+      organ_num = #{organNum,jdbcType=VARCHAR},
+      legal = #{legal,jdbcType=VARCHAR},
+      legal_indentity = #{legalIndentity,jdbcType=VARCHAR},
+      openbank = #{openbank,jdbcType=VARCHAR},
+      ob_branch = #{obBranch,jdbcType=VARCHAR},
+      bank_num = #{bankNum,jdbcType=VARCHAR},
+      createid = #{createid,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR}
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </update>
+</mapper>

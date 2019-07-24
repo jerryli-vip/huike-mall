@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/mall-seckill-springboot/src/main/webapp/WEB-INF/web.xml" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-business-web" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-business/supergo-business-service" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-cart-web" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-cart/supergo-cart-service" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-cms/supergo-cms-service" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-item/supergo-item-service" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-manager-web" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-manager/supergo-manager-service" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-member-web" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-member/supergo-member-service" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-order-web" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-order/supergo-order-service" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-portal-web" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-search-web" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-search/supergo-search-service" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-sso-web" />
+    <file type="web" url="file://$PROJECT_DIR$/supergo-sso/supergo-sso-service" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/classes" />
+  </component>
+</project>

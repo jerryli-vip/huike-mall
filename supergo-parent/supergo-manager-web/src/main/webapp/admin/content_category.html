@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>广告分类管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    
+    <!-- 加入angularJS -->
+    <script src="/plugins/angularjs/angular.min.js"></script>
+    <!-- 加入angularjs的pagination模块 -->
+    <script src="/plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+    
+    <!-- 引入基础模块和控制器 -->
+    <script src="/js/supergo/base/base_app_pagination.js"></script>
+    <script src="/js/supergo/base/base_controller.js"></script>
+    
+    <!-- 编写content_category.js文件 -->
+    <script src="/js/supergo/content_category.js"></script>
+    
+    
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="supergo" ng-controller="contentCategoryController">
+  <!-- .box-body -->
+                
+                    <div class="box-header with-border">
+                        <h3 class="box-title">广告分类管理</h3>
+                    </div>
+
+                    <div class="box-body">
+
+                        <!-- 数据表格 -->
+                        <div class="table-box">
+
+                            <!--工具栏-->
+                            <div class="pull-left">
+                                <div class="form-group form-inline">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#addModal" ><i class="fa fa-file-o"></i> 新建</button>
+                                        <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i class="fa fa-trash-o"></i> 删除</button>
+                                        <button type="button" class="btn btn-default" title="开启" ng-click="puton()"><i class="fa fa-check"></i> 开启</button>
+                                        <button type="button" class="btn btn-default" title="屏蔽" ng-click="putoff()"><i class="fa fa-ban"></i> 屏蔽</button>
+                                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-tools pull-right">
+                                <div class="has-feedback">
+							        名称：<input ng-model="searchBean.categoryName">	<button class="btn btn-default" ng-click="reloadList()">查询</button>                                    
+                                </div>
+                            </div>
+                            <!--工具栏/-->
+
+			                  <!--数据列表-->
+			                  <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+			                      <thead>
+			                          <tr>
+			                              <th class="" style="padding-right:0px">
+			                                  <input id="selall" type="checkbox" class="icheckbox_square-blue" ng-model="all" ng-click="selAll()">
+			                              </th> 
+										  <th class="sorting_asc">分类ID</th>
+									      <th class="sorting">分类名称</th>
+									      <th class="sorting">分组</th>
+									      <th class="sorting">KEY</th>
+									      <th class="sorting">状态</th>								      							
+					                      <th class="text-center">操作</th>
+			                          </tr>
+			                      </thead>
+			                      <tbody>
+			                         <tr ng-repeat="category in categoryList">
+                                          <td><input  type="checkbox" ng-checked="all" ng-click="updateSelection($event,category.adCategoryId)" > </td>                                          
+                                          <td>{{category.adCategoryId}}</td>
+                                          <td>{{category.categoryName}}</td>
+                                          <td>{{category.groupname}}</td>
+                                          <td>{{category.code}}</td>
+                                          <td>
+                                                <span ng-if="category.status==0"> <b>无效</b></span>
+					                            <span ng-if="category.status!=0"> 无效 </span>
+					                            <span ng-if="category.status==1"> <b>有效</b></span>
+					                            <span ng-if="category.status!=1"> 有效 </span>
+					                            <span ng-if="category.status==2"> <b>已删除</b></span>
+					                            <span ng-if="category.status!=2"> 已删除 </span>
+                                          </td>
+                                          <td class="text-center">                                           
+                                              <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" ng-click="editInit(category)">修改</button>                                           
+                                          </td>
+                                      </tr>
+			                      </tbody>
+			                  </table>
+			                  <!--数据列表/-->
+					            <div class="text-center">
+					
+					                <!-- angularjs提供的分页控件 -->
+					                <tm-pagination conf="paginationConf"></tm-pagination>
+					
+					            </div>
+                        </div>
+                        <!-- 数据表格 /-->
+                     </div>
+                    <!-- /.box-body -->
+	            <!-- 分页 -->
+
+<!-- 添加窗口 -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="addModal">广告分类添加</h3>
+        </div>
+        <div class="modal-body">                            
+            
+            <table class="table table-bordered table-striped"  width="800px">
+                <tr>
+                    <td>分类名称</td>
+                    <td><input  class="form-control" placeholder="分类名称" ng-model="addCategory.categoryName">  </td>
+                </tr>
+                <tr>
+                    <td>分组</td>
+                    <td><input  class="form-control" placeholder="分组" ng-model="addCategory.groupname" >  </td>
+                </tr>   
+                <tr>
+                    <td>KEY</td>
+                    <td><input  class="form-control" placeholder="KEY" ng-model="addCategory.code"  >  </td>
+                </tr>
+                <!-- <tr>
+                    <td>上级分类</td>
+                    <td><input  class="form-control" placeholder="上级分类">  </td>
+                </tr> -->
+                <tr>
+                    <td>状态</td>
+                    <td>
+                      <select ng-init = "addCategory.status = 1" ng-model="addCategory.status">
+                                    <option value="0">无效</option>
+                                    <option value="1">有效</option>
+                                </select>
+                    </td>
+                </tr>   
+             </table>               
+            
+        </div>
+        <div class="modal-footer">                      
+            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="add()" >保存</button>
+            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+      </div>
+    </div>
+</div>
+			                
+<!-- 编辑窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">广告分类编辑</h3>
+        </div>
+        <div class="modal-body">                            
+            
+            <table class="table table-bordered table-striped"  width="800px">
+                <tr>
+                    <td>分类名称</td>
+                    <td><input  class="form-control" placeholder="分类名称" ng-model="editCategory.categoryName">  </td>
+                </tr>
+                <tr>
+                    <td>分组</td>
+                    <td><input  class="form-control" placeholder="分组" ng-model="editCategory.groupname" >  </td>
+                </tr>   
+                <tr>
+                    <td>KEY</td>
+                    <td><input  class="form-control" placeholder="KEY" ng-model="editCategory.code"  >  </td>
+                </tr>
+                <!-- <tr>
+                    <td>上级分类</td>
+                    <td><input  class="form-control" placeholder="上级分类">  </td>
+                </tr> -->
+                <tr>
+                    <td>状态</td>
+                    <td>
+                      <select  ng-model="editCategory.status">
+                                    <option value="0">无效</option>
+                                    <option value="1">有效</option>
+                                    <option value="2">删除</option>
+                                </select>
+                    </td>
+                </tr>   
+             </table>               
+            
+        </div>
+        <div class="modal-footer">                      
+            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="edit()" >保存</button>
+            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+    
+</body>
+
+</html>

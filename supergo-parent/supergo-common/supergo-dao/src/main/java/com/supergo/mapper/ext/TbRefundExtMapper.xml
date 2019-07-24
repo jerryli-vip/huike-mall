@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbRefundExtMapper">
+	<resultMap id="BaseResultMap" type="com.supergo.pojo.ext.TbRefundExt">
+		<id column="refund_id" property="refundId" jdbcType="VARCHAR" />
+		<result column="return_goods_id" property="returnGoodsId"
+			jdbcType="VARCHAR" />
+		<result column="ordersub_id" property="ordersubId" jdbcType="VARCHAR" />
+		<result column="tb_order" property="tbOrder" jdbcType="VARCHAR" />
+		<result column="audit_status" property="auditStatus" jdbcType="CHAR" />
+		<result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+		<result column="return_goods_status" property="returnGoodsStatus"
+			jdbcType="CHAR" />
+		<result column="return_goods_time" property="returnGoodsTime"
+			jdbcType="TIMESTAMP" />
+		<result column="recive_name" property="reciveName" jdbcType="VARCHAR" />
+		<result column="recive_mobile" property="reciveMobile"
+			jdbcType="VARCHAR" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+		<result column="return_reason" property="returnReason"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="where">
+		<if test="refundId != null and refundId != '' ">
+			AND refund_id =#{refundId}
+		</if>
+		<if test="ordersubId != null and ordersubId != '' ">
+			AND tbr.ordersub_id = #{ordersubId}
+		</if>
+		<if test="returnGoodsStatus != null and returnGoodsStatus != '' ">
+			AND return_goods_status= #{returnGoodsStatus}
+		</if>
+		<if test="startTime!=null and startTime!=''">  
+            <![CDATA[   and DATE_FORMAT(tbr.return_goods_time, '%Y-%m-%d')>=  DATE_FORMAT(#{startTime}, '%Y-%m-%d')   ]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">  
+            <![CDATA[  and DATE_FORMAT(tbr.return_goods_time, '%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')    ]]>
+		</if>
+	</sql>
+	<select id="selectByExt" resultMap="BaseResultMap">
+		SELECT tbr.refund_id
+		,tbr.return_goods_id ,
+		tbr.ordersub_id,tbr.tb_order,tbr.audit_status
+		,tbr.apply_time,tbr.return_goods_status,tbr.return_goods_time,
+		tod.recive_name , tod.recive_mobile , tbs.shop_name
+		FROM tb_refund tbr
+		LEFT JOIN tb_order_delivery tod
+		ON tod.ordersub_id = tbr.ordersub_id
+		LEFT JOIN tb_sub_order tbs
+		ON tbr.ordersub_id=tbs.ordersub_id
+		<where>
+			<include refid="where"></include>
+		</where>
+	</select>
+
+	<select id="selectRefundStatusById" resultMap="BaseResultMap">
+
+		SELECT
+		tbr.return_goods_time,tbr.return_goods_status,tbr.return_reason,tbr.apply_time
+		FROM tb_refund tbr
+		WHERE tbr.ordersub_id=#{ordersubId}
+	</select>
+
+
+</mapper>

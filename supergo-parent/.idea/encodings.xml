@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-business" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-business-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-business/supergo-business-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-business/supergo-business-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-cart" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-cart-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-cart/supergo-cart-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-cart/supergo-cart-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-cms" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-cms/supergo-cms-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-cms/supergo-cms-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-common/supergo-component-search" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-common/supergo-dao" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-common/supergo-pojo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-common/supergo-utils" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-item" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-item/supergo-item-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-item/supergo-item-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-manager" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-manager-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-manager/supergo-manager-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-manager/supergo-manager-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-member" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-member-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-member/supergo-member-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-member/supergo-member-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-order" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-order-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-order/supergo-order-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-order/supergo-order-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-portal-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-search" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-search-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-search/supergo-search-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-search/supergo-search-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-sso" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-sso-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-sso/supergo-sso-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supergo-sso/supergo-sso-service" charset="UTF-8" />
+  </component>
+</project>

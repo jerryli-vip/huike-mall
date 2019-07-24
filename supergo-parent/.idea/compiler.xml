@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="supergo-item-service" />
+        <module name="supergo-manager-interface" />
+        <module name="supergo-order-service" />
+        <module name="supergo-manager-service" />
+        <module name="supergo-item-interface" />
+        <module name="supergo-business-web" />
+        <module name="supergo-order-interface" />
+        <module name="supergo-sso-interface" />
+        <module name="supergo-dao" />
+        <module name="supergo-business-service" />
+        <module name="supergo-sso-web" />
+        <module name="supergo-sso-service" />
+        <module name="supergo-utils" />
+        <module name="supergo-manager-web" />
+        <module name="supergo-cms-service" />
+        <module name="supergo-member-service" />
+        <module name="supergo-cms-interface" />
+        <module name="supergo-portal-web" />
+        <module name="supergo-search-web" />
+        <module name="supergo-component-search" />
+        <module name="supergo-search-service" />
+        <module name="supergo-pojo" />
+        <module name="supergo-member-web" />
+        <module name="supergo-cart-service" />
+        <module name="supergo-cart-web" />
+        <module name="supergo-member-interface" />
+        <module name="supergo-cart-interface" />
+        <module name="supergo-business-interface" />
+        <module name="supergo-search-interface" />
+        <module name="supergo-order-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="supergo-business" target="1.7" />
+      <module name="supergo-business-interface" target="1.7" />
+      <module name="supergo-business-service" target="1.7" />
+      <module name="supergo-business-web" target="1.7" />
+      <module name="supergo-cart" target="1.7" />
+      <module name="supergo-cart-interface" target="1.7" />
+      <module name="supergo-cart-service" target="1.7" />
+      <module name="supergo-cart-web" target="1.7" />
+      <module name="supergo-cms" target="1.7" />
+      <module name="supergo-cms-interface" target="1.7" />
+      <module name="supergo-cms-service" target="1.7" />
+      <module name="supergo-common" target="1.7" />
+      <module name="supergo-component-search" target="1.7" />
+      <module name="supergo-dao" target="1.7" />
+      <module name="supergo-item" target="1.7" />
+      <module name="supergo-item-interface" target="1.7" />
+      <module name="supergo-item-service" target="1.7" />
+      <module name="supergo-manager" target="1.7" />
+      <module name="supergo-manager-interface" target="1.7" />
+      <module name="supergo-manager-service" target="1.7" />
+      <module name="supergo-manager-web" target="1.7" />
+      <module name="supergo-member" target="1.7" />
+      <module name="supergo-member-interface" target="1.7" />
+      <module name="supergo-member-service" target="1.7" />
+      <module name="supergo-member-web" target="1.7" />
+      <module name="supergo-order" target="1.7" />
+      <module name="supergo-order-interface" target="1.7" />
+      <module name="supergo-order-service" target="1.7" />
+      <module name="supergo-order-web" target="1.7" />
+      <module name="supergo-parent" target="1.7" />
+      <module name="supergo-pojo" target="1.7" />
+      <module name="supergo-portal-web" target="1.7" />
+      <module name="supergo-search" target="1.7" />
+      <module name="supergo-search-interface" target="1.7" />
+      <module name="supergo-search-service" target="1.7" />
+      <module name="supergo-search-web" target="1.7" />
+      <module name="supergo-sso" target="1.7" />
+      <module name="supergo-sso-interface" target="1.7" />
+      <module name="supergo-sso-service" target="1.7" />
+      <module name="supergo-sso-web" target="1.7" />
+      <module name="supergo-utils" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

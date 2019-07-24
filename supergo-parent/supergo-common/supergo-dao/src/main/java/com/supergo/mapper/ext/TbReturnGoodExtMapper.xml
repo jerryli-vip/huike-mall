@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbReturnGoodExtMapper">
+	
+	<!-- <sql id="where">
+	<choose>
+            <when test="ordersubId != null and ordersubId != '' ">
+                AND tso.status_o = '1'
+            </when>
+            <otherwise>
+                AND tso.status_o = '0'
+            </otherwise>
+        </choose>
+	     <if test="reciveName != null and reciveName != '' ">
+	       AND recive_name LIKE '%${reciveName}%'
+	     </if>
+	     <if test="returnGoodsStatus != null and returnGoodsStatus != '' ">
+           AND status_return = #{returnGoodsStatus}
+         </if>
+        
+	</sql> -->
+	
+	<select id="selectByManage" parameterType="com.supergo.pojo.ext.TbReturnGoodsExt" resultType="com.supergo.pojo.ext.TbReturnGoodsExt">
+	SELECT
+    trg.return_goods_id returnGoodsId ,
+    trg.ordersub_id ordersubId,
+    trg.tb_order tbOrder,
+    tri.goods_name goodsName,
+    toi.sell_price sellPrice,
+    tri.recive_name reciveName,
+    tri.recive_mobile reciveMobile,
+    toi.actual_payment actualPayment,
+    trg.apply_time applyTime,
+    trg.return_goods_status returnGoodsStatus,
+    trg.return_goods_time returnGoodsTime,
+    tri.shop_name shopName
+FROM
+    tb_return_item tri
+    LEFT JOIN tb_order_item toi ON toi.order_item_id = tri.order_item_id
+    LEFT JOIN tb_return_goods trg ON tri.ordersub_id = trg.ordersub_id 
+    <if test="reciveName != null and reciveName != '' ">
+           AND recive_name LIKE '%${reciveName}%'
+    </if>
+    <if test="returnGoodsStatus != null and returnGoodsStatus != '' ">
+           AND return_goods_status = #{returnGoodsStatus}
+    </if>
+    <if test="ordersubId != null and ordersubId != '' ">
+           AND trg.ordersub_id = #{ordersubId}
+    </if>
+    <if test="startTime!=null and startTime!=''">  
+            <![CDATA[   and DATE_FORMAT(trg.return_goods_time, '%Y-%m-%d')>=  DATE_FORMAT(#{startTime}, '%Y-%m-%d')   ]]>  
+    </if>  
+    <if test="endTime!=null and endTime!=''">  
+            <![CDATA[  and DATE_FORMAT(trg.return_goods_time, '%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')    ]]>  
+    </if>
+    
+	</select>
+	
+    
+    <update id="updateByPrimaryKey" parameterType="com.supergo.pojo.ext.TbReturnGoodsExt">
+    UPDATE tb_return_goods SET return_goods_status = #{returnGoodsStatus},return_goods_time=#{returnGoodsTime} WHERE tb_order =#{tbOrder}
+    
+    </update>
+
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbBusinessMapperExt">
+	<insert id="insert" parameterType="com.supergo.pojo.TbBusiness">
+	 <!-- selectKey将主键返回，需要再返回 -->
+	  <selectKey keyProperty="businessId" order="AFTER" resultType="java.lang.Integer">
+	   select LAST_INSERT_ID()
+	    </selectKey> 
+	    insert into tb_business(business_status,default_shop_name,phone,email,comp_mobile,comp_name,comp_phone,comp_address,con_name,con_qq,con_mobile,con_email,license_num,taxregist_num,organ_num,legal,legal_indentity,openbank,ob_branch,bank_num,is_delete,createid,createtime,update_user,update_time)
+	    values(#{businessStatus},#{defaultShopName},#{phone},#{email},#{compMobile},#{compName},#{compPhone},#{compAddress},#{conName},#{conQq},#{conMobile},#{conEmail},#{licenseNum},#{taxregistNum},#{organNum},#{legal},#{legalIndentity},#{openbank},#{obBranch},#{bankNum},#{isDelete},1,NOW(),1,NOW());
+	   </insert>
+	   
+	  
+
+	<select id="selectBusinessId" parameterType="com.supergo.pojo.TbShopUser" resultType="java.lang.Integer">
+		select business_id   from tb_shop ts  LEFT JOIN tb_shop_user  tu  ON ts.shop_id=tu.shop_id   where shop_user_id = #{shopUserId}
+
+	</select>
+
+	
+	<select id="queryAllShopUser"  resultType="com.supergo.pojo.TbShopUser">
+		select shop_user_id shopUserId,shop_user_name shopUserName,create_id createId,create_time createTime,update_id updateId,update_time updateTime,last_login_time lastLoginTime from tb_shop_user
+	</select>
+	   
+	<update id="updateById" parameterType="com.supergo.pojo.TbShopUser">
+	  UPDATE tb_business set default_shop_id = #{defaultShopId} WHERE business_id = #{businessId}
+	</update>
+	   
+
+</mapper>

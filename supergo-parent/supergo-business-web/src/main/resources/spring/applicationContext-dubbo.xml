@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+	<dubbo:application name="supergo-business-web-consumer" />
+
+	<!-- 使用multicast广播注册中心暴露发现服务地址 -->
+	<dubbo:registry address="${dubbo.registry.address}"></dubbo:registry>
+	<!-- 设置响应超时时间，默认是1000，单位是毫秒 -->
+	<!-- 如果是debug模式，最好将时间变长，要不会超时报错 -->
+	<dubbo:consumer timeout="10000" check="false" />
+	<dubbo:annotation package="com.supergo.controller" />
+	<!-- shiro框架不兼容dubbox注解，需要手动引用dubbox服务 -->
+	<dubbo:reference id="tbShopUserService"
+		interface="com.supergo.service.TbShopUserService"></dubbo:reference>
+	<dubbo:reference id="tbUserService" interface="com.supergo.service.TbUserService"></dubbo:reference>
+	<dubbo:reference id="tbRoleService" interface="com.supergo.service.TbRoleService"></dubbo:reference>
+	<dubbo:reference id="tbAuthorityService"
+		interface="com.supergo.service.TbAuthorityService"></dubbo:reference>
+</beans>

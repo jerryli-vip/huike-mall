@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+    
+   <!-- redis 相关配置 --> 
+   <!-- 连接池配置 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+      <!-- 最大的空闲连接数 -->
+     <property name="maxIdle" value="${redis.maxIdle}"/>   
+     <!-- 最长等待时间（毫秒） -->
+     <property name="maxWaitMillis" value="${redis.maxWait}"/>  
+     <!-- 从连接池中提取连接对象要进行验证，保证每一个都可用 -->
+     <property name="testOnBorrow" value="${redis.testOnBorrow}"/>  
+    </bean>
+     <bean id="JedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" 
+       p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:pool-config-ref="jedisPoolConfig"/>  
+   
+    <bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="JedisConnectionFactory" />
+    </bean>
+   
+   <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">  
+        <property name="connectionFactory" ref="JedisConnectionFactory" />  
+   </bean>  
+   
+
+    <!-- redis单机 通过连接池 -->
+   <!--  <bean id="jedisPool" class="redis.clients.jedis.JedisPool"
+        destroy-method="close">
+        <constructor-arg name="poolConfig" ref="jedisPoolConfig" />
+        <constructor-arg name="host" value="192.168.4.225" />
+        <constructor-arg name="port" value="6379" />
+    </bean> -->
+</beans>
+
+ 

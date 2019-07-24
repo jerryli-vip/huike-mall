@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbExchangeGoodsExtMapper">
+	<resultMap id="BaseResultMap" type="com.supergo.pojo.ext.TbExchangeGoodsExt">
+		<id column="exchange_goods_id" property="exchangeGoodsId" jdbcType="VARCHAR" />
+		<result column="ordersub_id" property="ordersubId" jdbcType="VARCHAR" />
+		<result column="tb_order" property="tbOrder" jdbcType="VARCHAR" />
+		<result column="exchange_reason" property="exchangeReason"
+			jdbcType="VARCHAR" />
+		<result column="audit_status" property="auditStatus" jdbcType="CHAR" />
+		<result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+		<result column="exchange_goods_status" property="exchangeGoodsStatus"
+			jdbcType="CHAR" />
+		<result column="exchange_goods_time" property="exchangeGoodsTime"
+			jdbcType="TIMESTAMP" />
+		<result column="recive_name" property="reciveName" jdbcType="VARCHAR" />
+		<result column="recive_mobile" property="reciveMobile"
+			jdbcType="VARCHAR" />
+		<result column="shop_name" property="shopName" jdbcType="CHAR" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="item_status" property="itemStatus" jdbcType="CHAR" />
+		<result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+		<result column="actual_payment" property="actualPayment"
+			jdbcType="DECIMAL" />
+	</resultMap>
+<select id="selectByExt" resultMap="BaseResultMap">
+		SELECT
+		tbe.exchange_goods_id,tbe.ordersub_id,tbe.tb_order,tbe.audit_status,tbe.apply_time,tbe.exchange_goods_status,tbe.exchange_goods_time,
+		tbo.goods_name,tbo.sell_price,tbo.actual_payment,tbs.shop_name,tbd.recive_name,tbd.recive_mobile
+		FROM tb_exchange_goods tbe
+		LEFT JOIN tb_order_item tbo
+		ON
+		tbe.ordersub_id=tbo.ordersub_id
+		LEFT JOIN tb_order_delivery tbd
+		ON
+		tbe.ordersub_id=tbd.ordersub_id
+		LEFT JOIN tb_sub_order tbs
+		ON
+		tbe.ordersub_id=tbs.ordersub_id
+
+		WHERE tbo.item_status="3"
+		<if test="reciveName != null and reciveName != '' ">
+			AND recive_name LIKE '%${reciveName}%'
+		</if>
+		<if test="ordersubId != null and ordersubId != '' ">
+			AND tbe.ordersub_id = #{ordersubId}
+		</if>
+		<if test="exchangeGoodsStatus != null and exchangeGoodsStatus != '' ">
+			AND exchange_goods_status = #{exchangeGoodsStatus}
+		</if>
+		<if test="startTime!=null and startTime!=''">  
+            <![CDATA[   and DATE_FORMAT(tbe.exchange_goods_time, '%Y-%m-%d')>=  DATE_FORMAT(#{startTime}, '%Y-%m-%d')   ]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">  
+            <![CDATA[  and DATE_FORMAT(tbe.exchange_goods_time, '%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')    ]]>
+		</if>
+	</select>
+
+	<select id="selectStatusById" resultMap="BaseResultMap">
+		SELECT
+		tbe.apply_time,tbe.exchange_goods_time,tbe.exchange_Reason,tbe.exchange_goods_status
+		FROM tb_exchange_goods tbe
+		WHERE tbe.ordersub_id=#{ordersubId}
+	</select>
+	<update id="updateById" parameterType="com.supergo.pojo.ext.TbExchangeGoodsExt">
+		UPDATE tb_order_delivery SET recive_name =
+		#{reciveName},recive_mobile=#{reciveMobile} 
+		WHERE ordersub_id =
+		#{ordersubId}
+	</update>
+
+
+
+
+</mapper>

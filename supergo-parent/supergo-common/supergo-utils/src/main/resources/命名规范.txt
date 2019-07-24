@@ -1,0 +1,65 @@
+JSP
+	同意写在WEB-INF/jsp/包中
+
+servlet层
+查看 ：对象Servlet  或  对象ListServlet   查询和展示放在一起
+		CustomerServlet  或  CustomerListServlet
+添加 ：对象AddServlet
+		CustomerAddServlet
+删除 ：对象DeleteServlet（单个）  对象DeleteAllServlet（批量）
+		CustomerDeleteServlet  CustomerDeleteAllServlet
+修改 ：对象EditServlet
+		CustomerEditServlet
+		
+==========================		
+Service   对象Service.java
+
+查看 ：listByXXXX 查询多个   selectByXXXXX 查询单个
+	主键用ByPrimaryKey
+
+添加 ：insert（xxx。。。）
+
+删除 ：deleteById（单个）   DeleteByIds（批量）
+
+修改 ：updateByXXX
+	   updateByPrimaryKey	根据主键查询后的修改
+
+==========================
+Dao 对象Dao.java
+查看 ：listByXXXX 查询多个   selectByXXXXX 查询单个
+	主键用ByPrimaryKey
+	其余用Byxxxx
+
+添加 ： insert（对象 对象名）
+
+删除 ：	deleteByXXX
+		deleteByPrimaryKey 根据主键删除
+
+修改 ： updateByXXX
+		updateByPrimaryKey	根据主键查询后的修改
+
+计数：  countByXXX
+
+
+
+ int countByExample(ContactsExample example);
+
+    int deleteByExample(ContactsExample example);
+
+    int deleteByPrimaryKey(Integer contactsId);
+
+    int insert(Contacts record);
+
+    int insertSelective(Contacts record);
+
+    List<Contacts> selectByExample(ContactsExample example);
+
+    Contacts selectByPrimaryKey(Integer contactsId);
+
+    int updateByExampleSelective(@Param("record") Contacts record, @Param("example") ContactsExample example);
+
+    int updateByExample(@Param("record") Contacts record, @Param("example") ContactsExample example);
+
+    int updateByPrimaryKeySelective(Contacts record);
+
+    int updateByPrimaryKey(Contacts record);

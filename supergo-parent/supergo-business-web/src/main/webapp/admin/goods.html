@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<!-- 页面meta -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>商品管理</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- 加入angularJS -->
+<script src="/plugins/angularjs/angular.min.js"></script>
+<!-- 加入angularjs的pagination模块 -->
+<script src="/plugins/angularjs/pagination.js"></script>
+<link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+
+<!-- 引入基础模块和控制器 -->
+<script src="/js/supergo/base/base_app_pagination.js"></script>
+<script src="/js/supergo/base/base_controller.js"></script>
+
+<!-- 编写brand.js文件 -->
+<script src="/js/supergo/goods.js"></script>
+
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="supergo"
+	ng-controller="goodsController">
+	<!-- .box-body -->
+
+	<div class="box-header with-border">
+		<h3 class="box-title">商品管理</h3>
+	</div>
+
+	<div class="box-body">
+
+		<!-- 数据表格 -->
+		<div class="table-box">
+
+			<!--工具栏-->
+			<div class="pull-left">
+				<div class="form-group form-inline">
+					<div class="btn-group">
+						<a href="goods_edit.html" target="iframe" class="btn btn-default"><i
+							class="fa fa-circle-o"></i> 新建</a>
+						<button type="button" class="btn btn-default" title="删除"
+							ng-click="deleteByIds()">
+							<i class="fa fa-trash-o"></i> 删除
+						</button>
+						<button type="button" class="btn btn-default" title="上架"
+							onclick='confirm("你确认要上架吗？")' ng-click="puton()">
+							<i class="fa fa-puton"></i> 上架
+						</button>
+						<button type="button" class="btn btn-default" title="下架"
+							onclick='confirm("你确认要下架吗？")' ng-click="putoff()">
+							<i class="fa fa-putoff"></i> 下架
+						</button>
+						<button type="button" class="btn btn-default" title="库存管理"
+							data-target="#myStock" data-toggle="modal" >
+							<i class="fa fa-stock"></i> 库存管理
+						</button>
+						<button type="button" class="btn btn-default" title="价格调整"
+							data-target="#myPrice" data-toggle="modal" >
+							<i class="fa fa-price"></i> 价格调整
+						</button>
+						<button type="button" class="btn btn-default" title="刷新"
+							onclick="window.location.reload();">
+							<i class="fa fa-refresh"></i> 刷新
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="box-tools pull-right">
+				<div class="has-feedback">
+					状态：<select ng-model="searchBean.status">
+						<option value="">全部</option>
+						<option value="0">上架</option>
+						<option value="1">下架</option>
+						<option value="2">已删除</option>
+					</select> 商品名称：<input ng-model="searchBean.goodsName">
+					<button class="btn btn-default" ng-click="reloadList()">查询</button>
+				</div>
+			</div>
+			<!--工具栏/-->
+
+			<!--数据列表-->
+			<table id="dataList"
+				class="table table-bordered table-striped table-hover dataTable">
+				<thead>
+					<tr>
+						<th class="" style="padding-right: 0px"><input id="selall"
+							type="checkbox" class="icheckbox_square-blue"
+							ng-model="all" ng-click="selAll()"></th>
+						<th class="sorting_asc">商品ID</th>
+						<th class="sorting">产品ID</th>
+						<th class="sorting">商品名称</th>
+						<th class="sorting">商品售价</th>
+						<th class="sorting">商品供价</th>
+						<th class="sorting">库存</th>
+						<th class="sorting">状态</th>
+						<th class="text-center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="goods in goodsList">
+						<td><input type="checkbox" ng-checked="all"  
+							ng-click="updateSelection($event,goods.goodsId)"></td>
+						<td>{{goods.goodsId}}</td>
+						<td>{{goods.productId}}</td>
+						<td>{{goods.goodsName}}</td>
+						<td>{{goods.sellPrice}}</td>
+						<td>{{goods.costPrice}}</td>
+						<td>{{goods.inventory}}</td>
+						<td>
+						    <span ng-if="goods.status==0"> <b>上架</b></span>
+						    <span ng-if="goods.status!=0"> 上架 </span>
+						    <span ng-if="goods.status==1"> <b>下架</b></span>
+						    <span ng-if="goods.status!=1"> 下架 </span>
+						    <span ng-if="goods.status==2"> <b>已删除</b></span>
+						    <span ng-if="goods.status!=2"> 已删除 </span>
+						</td>
+						<td class="text-center">
+						
+							<button type="button" class="btn bg-olive btn-xs"
+								data-toggle="modal" data-target="#goodsEdit"
+								ng-click="showEditPage(goods)"
+								
+								
+								>修改</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!--数据列表/-->
+			<div class="text-center">
+
+				<!-- angularjs提供的分页控件 -->
+				<tm-pagination conf="paginationConf"></tm-pagination>
+
+			</div>
+		</div>
+		<!-- 数据表格 /-->
+
+
+	</div>
+	<!-- /.box-body -->
+	<!-- 库存管理 -->
+	<div class="modal fade" id="myStock" tabindex="-1" role="dialog"
+		aria-labelledby="myStock" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h3 id="myStock">批量库存管理</h3>
+					</div>
+					<div class="modal-body">
+						<table class="table table-bordered table-striped" width="800px">
+							<tr>
+								<td>输入新的库存数量</td>
+								<td>									
+									<input ng-model="stocknum" class="form-control" placeholder="输入新的库存数量">
+								</td>
+							</tr>
+						</table>
+	
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-success"  data-dismiss="modal"
+                            aria-hidden="true" type="button" ng-click="changeStock()">保存</button>
+						<button class="btn btn-default" data-dismiss="modal"
+							aria-hidden="true" type="button" >关闭</button>
+					</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 价格编辑 -->
+	<div class="modal fade" id="myPrice" tabindex="-1" role="dialog"
+		aria-labelledby="myPrice" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myPrice">批量价格修改</h3>
+				</div>
+				<div class="modal-body">
+
+					<table class="table table-bordered table-striped" width="800px">
+
+						<tr>
+							<td>输入新的价格</td>
+							<td><input ng-model="pricenum" class="form-control" placeholder="输入新的价格">
+							</td>
+						</tr>
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" data-dismiss="modal"
+						aria-hidden="true" ng-click="changePrice()" >保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	   <!-- 商品编辑 -->
+    <div class="modal fade" id="goodsEdit" tabindex="-1" role="dialog"
+        aria-labelledby="goodsEdit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×</button>
+                    <h3 id="goodsEdit">商品信息修改</h3>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table table-bordered table-striped" width="800px">
+                        <caption >{{goodsEdit.goodsName}}</caption>
+                        <tr>
+                            <td>产品售价</td>
+                            <td><input ng-model="goodsEdit.sellPrice" class="form-control" placeholder="输入新的价格">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>产品供价</td>
+                            <td><input ng-model="goodsEdit.costPrice" class="form-control" placeholder="输入新的价格">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>产品库存</td>
+                            <td><input ng-model="goodsEdit.inventory" class="form-control" placeholder="输入的产品库存">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>产品状态</td>
+                            <td>
+	                            <select ng-model="goodsEdit.status">
+			                        <option value="0">上架</option>
+			                        <option value="1">下架</option>
+			                        <option value="2">已删除</option>
+			                    </select>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-dismiss="modal"
+                        aria-hidden="true" ng-click="edit(goodsEdit)" >保存</button>
+                    <button class="btn btn-default" data-dismiss="modal"
+                        aria-hidden="true">关闭</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

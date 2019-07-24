@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.ItemExtMapper">
+	<resultMap id="BaseResultMap" type="com.supergo.pojo.ext.ItemListExt">
+		<id column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+		<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+		<result column="introduce" property="introduce" jdbcType="LONGVARCHAR" />
+		<result column="extrattribute" property="extrattribute"
+			jdbcType="LONGVARCHAR" />
+		<result column="spec_info" property="specInfo" jdbcType="VARCHAR" />
+		<result column="specs" property="specs" jdbcType="VARCHAR" />
+		<result column="template" property="template" jdbcType="VARCHAR" />
+		<result column="template_id" property="templateId" jdbcType="INTEGER" />
+
+	</resultMap>
+	<select id="queryItemListById" resultMap="BaseResultMap">
+
+	SELECT
+	tbg.goods_id,
+	tbg.goods_name,
+	tbg.sell_price,
+	tbp.introduce,
+	tbp.extrattribute,
+	tbg.spec_info
+	FROM
+	tb_goods tbg
+	LEFT JOIN tb_product_info tbp ON
+	(SELECT
+	product_id
+	FROM
+	tb_goods
+	WHERE goods_id=#{goods_id})=tbp.product_id
+	WHERE
+	tbg.goods_id =#{goods_Id}
+	</select>
+
+	<select id="querySpecListById" resultMap="BaseResultMap">
+	SELECT
+	goods_id,
+	goods_name,
+	product_id,
+	spec_info
+	FROM tb_goods
+	WHERE product_id=(SELECT
+	product_id
+	FROM
+	tb_goods
+	WHERE goods_id=#{goods_id})
+	</select>
+
+	<select id="queryItemImg" resultType="java.lang.String">
+		SELECT img_path FROM tb_image WHERE goods_id = #{goods_id}
+	</select>
+</mapper>

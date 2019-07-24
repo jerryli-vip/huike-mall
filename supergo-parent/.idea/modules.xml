@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/supergo-business/supergo-business.iml" filepath="$PROJECT_DIR$/supergo-business/supergo-business.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-business/supergo-business-interface/supergo-business-interface.iml" filepath="$PROJECT_DIR$/supergo-business/supergo-business-interface/supergo-business-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-business/supergo-business-service/supergo-business-service.iml" filepath="$PROJECT_DIR$/supergo-business/supergo-business-service/supergo-business-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-business-web/supergo-business-web.iml" filepath="$PROJECT_DIR$/supergo-business-web/supergo-business-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-cart/supergo-cart.iml" filepath="$PROJECT_DIR$/supergo-cart/supergo-cart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-cart/supergo-cart-interface/supergo-cart-interface.iml" filepath="$PROJECT_DIR$/supergo-cart/supergo-cart-interface/supergo-cart-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-cart/supergo-cart-service/supergo-cart-service.iml" filepath="$PROJECT_DIR$/supergo-cart/supergo-cart-service/supergo-cart-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-cart-web/supergo-cart-web.iml" filepath="$PROJECT_DIR$/supergo-cart-web/supergo-cart-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-cms/supergo-cms.iml" filepath="$PROJECT_DIR$/supergo-cms/supergo-cms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-cms/supergo-cms-interface/supergo-cms-interface.iml" filepath="$PROJECT_DIR$/supergo-cms/supergo-cms-interface/supergo-cms-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-cms/supergo-cms-service/supergo-cms-service.iml" filepath="$PROJECT_DIR$/supergo-cms/supergo-cms-service/supergo-cms-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-common/supergo-common.iml" filepath="$PROJECT_DIR$/supergo-common/supergo-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-common/supergo-component-search/supergo-component-search.iml" filepath="$PROJECT_DIR$/supergo-common/supergo-component-search/supergo-component-search.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-common/supergo-dao/supergo-dao.iml" filepath="$PROJECT_DIR$/supergo-common/supergo-dao/supergo-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-item/supergo-item.iml" filepath="$PROJECT_DIR$/supergo-item/supergo-item.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-item/supergo-item-interface/supergo-item-interface.iml" filepath="$PROJECT_DIR$/supergo-item/supergo-item-interface/supergo-item-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-item/supergo-item-service/supergo-item-service.iml" filepath="$PROJECT_DIR$/supergo-item/supergo-item-service/supergo-item-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-manager/supergo-manager.iml" filepath="$PROJECT_DIR$/supergo-manager/supergo-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-manager/supergo-manager-interface/supergo-manager-interface.iml" filepath="$PROJECT_DIR$/supergo-manager/supergo-manager-interface/supergo-manager-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-manager/supergo-manager-service/supergo-manager-service.iml" filepath="$PROJECT_DIR$/supergo-manager/supergo-manager-service/supergo-manager-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-manager-web/supergo-manager-web.iml" filepath="$PROJECT_DIR$/supergo-manager-web/supergo-manager-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-member/supergo-member.iml" filepath="$PROJECT_DIR$/supergo-member/supergo-member.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-member/supergo-member-interface/supergo-member-interface.iml" filepath="$PROJECT_DIR$/supergo-member/supergo-member-interface/supergo-member-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-member/supergo-member-service/supergo-member-service.iml" filepath="$PROJECT_DIR$/supergo-member/supergo-member-service/supergo-member-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-member-web/supergo-member-web.iml" filepath="$PROJECT_DIR$/supergo-member-web/supergo-member-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-order/supergo-order.iml" filepath="$PROJECT_DIR$/supergo-order/supergo-order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-order/supergo-order-interface/supergo-order-interface.iml" filepath="$PROJECT_DIR$/supergo-order/supergo-order-interface/supergo-order-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-order/supergo-order-service/supergo-order-service.iml" filepath="$PROJECT_DIR$/supergo-order/supergo-order-service/supergo-order-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-order-web/supergo-order-web.iml" filepath="$PROJECT_DIR$/supergo-order-web/supergo-order-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-parent.iml" filepath="$PROJECT_DIR$/supergo-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-common/supergo-pojo/supergo-pojo.iml" filepath="$PROJECT_DIR$/supergo-common/supergo-pojo/supergo-pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-portal-web/supergo-portal-web.iml" filepath="$PROJECT_DIR$/supergo-portal-web/supergo-portal-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-search/supergo-search.iml" filepath="$PROJECT_DIR$/supergo-search/supergo-search.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-search/supergo-search-interface/supergo-search-interface.iml" filepath="$PROJECT_DIR$/supergo-search/supergo-search-interface/supergo-search-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-search/supergo-search-service/supergo-search-service.iml" filepath="$PROJECT_DIR$/supergo-search/supergo-search-service/supergo-search-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-search-web/supergo-search-web.iml" filepath="$PROJECT_DIR$/supergo-search-web/supergo-search-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-sso/supergo-sso.iml" filepath="$PROJECT_DIR$/supergo-sso/supergo-sso.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-sso/supergo-sso-interface/supergo-sso-interface.iml" filepath="$PROJECT_DIR$/supergo-sso/supergo-sso-interface/supergo-sso-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-sso/supergo-sso-service/supergo-sso-service.iml" filepath="$PROJECT_DIR$/supergo-sso/supergo-sso-service/supergo-sso-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-sso-web/supergo-sso-web.iml" filepath="$PROJECT_DIR$/supergo-sso-web/supergo-sso-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-common/supergo-utils/supergo-utils.iml" filepath="$PROJECT_DIR$/supergo-common/supergo-utils/supergo-utils.iml" />
+    </modules>
+  </component>
+</project>

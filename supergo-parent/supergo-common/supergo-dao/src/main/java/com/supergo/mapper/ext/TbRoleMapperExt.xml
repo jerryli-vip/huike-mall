@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbRoleMapperExt">
+	<select id="queryRole" parameterType="com.supergo.pojo.TbRole"
+		resultType="com.supergo.pojo.TbRole">
+		select role_id roleId,role_name roleName,grade,parent_id parentId,role_description
+		roleDescription,update_id updateId,update_time updateTime from Tb_Role
+		<where>
+			is_delete = 'N'
+			<if test="roleName != null">
+				AND role_name like '%${roleName}%'
+			</if>
+			<if test="type != null">
+				AND type = #{type}
+			</if>
+			AND grade in (1,2,3)
+		</where>
+	</select>
+
+	<update id="batchManagerRole" parameterType="java.util.List">
+		update tb_role set is_delete = 'Y' where role_id in
+		<foreach item="batch_delete_id" collection="list" open="("
+			separator="," close=")">
+			#{batch_delete_id}
+		</foreach>
+		AND type = 1
+	</update>
+
+	<insert id="insertRole" parameterType="com.supergo.pojo.TbRole">
+		insert into tb_role
+		(role_name,grade,parent_id,role_description,type,create_id,update_id,create_time,update_time,is_delete)values(#{roleName},#{grade},#{parentId},#{roleDescription},#{type},#{createId},#{updateId},#{createTime},#{updateTime},#{isDelete})
+	</insert>
+
+	<update id="updateRole" parameterType="com.supergo.pojo.TbRole">
+		update tb_role set
+		role_name = #{roleName},grade =#{grade},parent_id
+		=#{parentId},role_description = #{roleDescription},update_id =
+		#{updateId},update_time =#{updateTime} where role_id =#{roleId}
+	</update>
+
+	<select id="queryAuthority" parameterType="java.lang.Integer" resultType="com.supergo.pojo.TbAuthority">
+		select authority_id
+		authorityId,authority_name authorityName from tb_authority where is_delete = 'N' AND type = #{type} AND authority_priority in (1,2,3)
+	</select>
+
+	<delete id="deleteAllAuthorityByRoleId" parameterType="java.lang.Integer">
+		delete
+		from tb_role_authority where role_id = #{roleId}
+	</delete>
+
+	<insert id="accreditRole" parameterType="com.supergo.pojo.TbRoleAuthority">
+		insert into
+		tb_role_authority (authority_id,role_id)
+		values(#{authorityId},#{roleId})
+	</insert>
+
+	<select id="showAuthority" parameterType="java.lang.Integer"
+		resultType="com.supergo.pojo.TbAuthority">
+		select authority_name authorityName from tb_role_authority ra inner join
+		tb_authority auth on ra.authority_id = auth.authority_id where
+		ra.role_id = #{roleId}
+	</select>
+	<select id="showParentRole" parameterType="java.lang.Integer" resultType="com.supergo.pojo.TbRole" >
+		select role_id roleId,role_name roleName,parent_id parentId from tb_role where grade in (0,1,2) AND is_delete = 'N' AND type=#{type}
+	</select>
+	<select id="selectGradeByParentId" resultType="java.lang.Integer">
+		select grade from tb_role where role_id =#{parentId}
+	</select>
+	<update id="batchBusinessRole" parameterType="java.util.List">
+		update tb_role set is_delete = 'Y' where role_id in
+		<foreach item="batch_delete_id" collection="list" open="("
+			separator="," close=")">
+			#{batch_delete_id}
+		</foreach>
+		AND type = 2
+	</update>
+</mapper>

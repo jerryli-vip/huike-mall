@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.TbExchangeGoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.supergo.pojo.TbExchangeGoods" >
+    <id column="exchange_goods_id" property="exchangeGoodsId" jdbcType="INTEGER" />
+    <result column="ordersub_id" property="ordersubId" jdbcType="VARCHAR" />
+    <result column="tb_order" property="tbOrder" jdbcType="VARCHAR" />
+    <result column="exchange_reason" property="exchangeReason" jdbcType="VARCHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="exchange_goods_status" property="exchangeGoodsStatus" jdbcType="VARCHAR" />
+    <result column="exchange_goods_time" property="exchangeGoodsTime" jdbcType="TIMESTAMP" />
+    <result column="create_id" property="createId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_id" property="updateId" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="exchange_status" property="exchangeStatus" jdbcType="VARCHAR" />
+    <result column="bak2" property="bak2" jdbcType="VARCHAR" />
+    <result column="bak3" property="bak3" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    exchange_goods_id, ordersub_id, tb_order, exchange_reason, audit_status, apply_time, 
+    exchange_goods_status, exchange_goods_time, create_id, create_time, update_id, update_time, 
+    exchange_status, bak2, bak3
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.supergo.pojo.TbExchangeGoodsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_exchange_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_exchange_goods
+    where exchange_goods_id = #{exchangeGoodsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_exchange_goods
+    where exchange_goods_id = #{exchangeGoodsId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.supergo.pojo.TbExchangeGoodsExample" >
+    delete from tb_exchange_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.supergo.pojo.TbExchangeGoods" >
+    insert into tb_exchange_goods (exchange_goods_id, ordersub_id, tb_order, 
+      exchange_reason, audit_status, apply_time, 
+      exchange_goods_status, exchange_goods_time, 
+      create_id, create_time, update_id, 
+      update_time, exchange_status, bak2, 
+      bak3)
+    values (#{exchangeGoodsId,jdbcType=INTEGER}, #{ordersubId,jdbcType=VARCHAR}, #{tbOrder,jdbcType=VARCHAR}, 
+      #{exchangeReason,jdbcType=VARCHAR}, #{auditStatus,jdbcType=CHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
+      #{exchangeGoodsStatus,jdbcType=VARCHAR}, #{exchangeGoodsTime,jdbcType=TIMESTAMP}, 
+      #{createId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{exchangeStatus,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
+      #{bak3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supergo.pojo.TbExchangeGoods" >
+    insert into tb_exchange_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="exchangeGoodsId != null" >
+        exchange_goods_id,
+      </if>
+      <if test="ordersubId != null" >
+        ordersub_id,
+      </if>
+      <if test="tbOrder != null" >
+        tb_order,
+      </if>
+      <if test="exchangeReason != null" >
+        exchange_reason,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="applyTime != null" >
+        apply_time,
+      </if>
+      <if test="exchangeGoodsStatus != null" >
+        exchange_goods_status,
+      </if>
+      <if test="exchangeGoodsTime != null" >
+        exchange_goods_time,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateId != null" >
+        update_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="exchangeStatus != null" >
+        exchange_status,
+      </if>
+      <if test="bak2 != null" >
+        bak2,
+      </if>
+      <if test="bak3 != null" >
+        bak3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="exchangeGoodsId != null" >
+        #{exchangeGoodsId,jdbcType=INTEGER},
+      </if>
+      <if test="ordersubId != null" >
+        #{ordersubId,jdbcType=VARCHAR},
+      </if>
+      <if test="tbOrder != null" >
+        #{tbOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeReason != null" >
+        #{exchangeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="applyTime != null" >
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exchangeGoodsStatus != null" >
+        #{exchangeGoodsStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeGoodsTime != null" >
+        #{exchangeGoodsTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        #{updateId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exchangeStatus != null" >
+        #{exchangeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null" >
+        #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null" >
+        #{bak3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.supergo.pojo.TbExchangeGoodsExample" resultType="java.lang.Integer" >
+    select count(*) from tb_exchange_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_exchange_goods
+    <set >
+      <if test="record.exchangeGoodsId != null" >
+        exchange_goods_id = #{record.exchangeGoodsId,jdbcType=INTEGER},
+      </if>
+      <if test="record.ordersubId != null" >
+        ordersub_id = #{record.ordersubId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tbOrder != null" >
+        tb_order = #{record.tbOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.exchangeReason != null" >
+        exchange_reason = #{record.exchangeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.auditStatus != null" >
+        audit_status = #{record.auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.applyTime != null" >
+        apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.exchangeGoodsStatus != null" >
+        exchange_goods_status = #{record.exchangeGoodsStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.exchangeGoodsTime != null" >
+        exchange_goods_time = #{record.exchangeGoodsTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createId != null" >
+        create_id = #{record.createId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateId != null" >
+        update_id = #{record.updateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.exchangeStatus != null" >
+        exchange_status = #{record.exchangeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bak2 != null" >
+        bak2 = #{record.bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bak3 != null" >
+        bak3 = #{record.bak3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_exchange_goods
+    set exchange_goods_id = #{record.exchangeGoodsId,jdbcType=INTEGER},
+      ordersub_id = #{record.ordersubId,jdbcType=VARCHAR},
+      tb_order = #{record.tbOrder,jdbcType=VARCHAR},
+      exchange_reason = #{record.exchangeReason,jdbcType=VARCHAR},
+      audit_status = #{record.auditStatus,jdbcType=CHAR},
+      apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+      exchange_goods_status = #{record.exchangeGoodsStatus,jdbcType=VARCHAR},
+      exchange_goods_time = #{record.exchangeGoodsTime,jdbcType=TIMESTAMP},
+      create_id = #{record.createId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_id = #{record.updateId,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      exchange_status = #{record.exchangeStatus,jdbcType=VARCHAR},
+      bak2 = #{record.bak2,jdbcType=VARCHAR},
+      bak3 = #{record.bak3,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supergo.pojo.TbExchangeGoods" >
+    update tb_exchange_goods
+    <set >
+      <if test="ordersubId != null" >
+        ordersub_id = #{ordersubId,jdbcType=VARCHAR},
+      </if>
+      <if test="tbOrder != null" >
+        tb_order = #{tbOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeReason != null" >
+        exchange_reason = #{exchangeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="applyTime != null" >
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exchangeGoodsStatus != null" >
+        exchange_goods_status = #{exchangeGoodsStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeGoodsTime != null" >
+        exchange_goods_time = #{exchangeGoodsTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        update_id = #{updateId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exchangeStatus != null" >
+        exchange_status = #{exchangeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null" >
+        bak2 = #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null" >
+        bak3 = #{bak3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where exchange_goods_id = #{exchangeGoodsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supergo.pojo.TbExchangeGoods" >
+    update tb_exchange_goods
+    set ordersub_id = #{ordersubId,jdbcType=VARCHAR},
+      tb_order = #{tbOrder,jdbcType=VARCHAR},
+      exchange_reason = #{exchangeReason,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=CHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      exchange_goods_status = #{exchangeGoodsStatus,jdbcType=VARCHAR},
+      exchange_goods_time = #{exchangeGoodsTime,jdbcType=TIMESTAMP},
+      create_id = #{createId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_id = #{updateId,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      exchange_status = #{exchangeStatus,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR}
+    where exchange_goods_id = #{exchangeGoodsId,jdbcType=INTEGER}
+  </update>
+</mapper>

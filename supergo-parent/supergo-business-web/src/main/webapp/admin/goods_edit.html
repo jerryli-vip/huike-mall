@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<!-- 页面meta -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>商品添加</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+	name="viewport">
+
+<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- 富文本编辑器 -->
+<link rel="stylesheet"
+	href="../plugins/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="../plugins/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="../plugins/kindeditor/lang/zh_CN.js"></script>
+
+<!-- 加入angularJS -->
+<script src="/plugins/angularjs/angular.min.js"></script>
+<!-- 加入angularjs的pagination模块 -->
+<script src="/plugins/angularjs/pagination.js"></script>
+<link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+
+<!-- 引入基础模块和控制器 -->
+<script src="/js/supergo/base/base_app_pagination.js"></script>
+<script src="/js/supergo/base/base_controller.js"></script>
+<script src="/js/supergo/goodsedit.js"></script>
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="supergo"
+	ng-controller="goodseditController">
+	
+	<!-- 正文区域 -->
+	<section class="content">
+		<div class="box-body">
+
+			<!--tab页-->
+			<div class="nav-tabs-custom">
+
+				<!--tab头-->
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#spec" data-toggle="tab">规格</a></li>
+					<li><a href="#pic_upload" data-toggle="tab">商品图片</a></li>
+
+				</ul>
+				<!--tab头/-->
+
+				<!--tab内容-->
+				<div class="tab-content">
+					<!--表单内容-->
+					<!--规格-->
+					<div class="tab-pane active" id="spec">
+						<div class="row data-type">
+							<div class="col-md-2 title">选择产品</div>
+							<div class="col-md-10 data">
+								<input ng-click="reloadList()" 
+								        ng-model="goodsbaseBean.goodsName"
+								        style="width:400px" placeholder="选择产品"
+									data-target="#myProduct" data-toggle="modal">
+								<button ng-click="reloadList()" type="button"
+									class="btn btn-default" title="选择产品" data-target="#myProduct"
+									data-toggle="modal">
+									<i class="fa fa-file-o"></i> 选择产品
+								</button>
+							</div>
+						</div>
+						<!-- <div class="row data-type">
+							<div class="col-md-2 title">是否启用规格</div>
+							<div class="col-md-10 data">
+								<input type="checkbox">
+								<button type="button" class="btn btn-default" title="自定义规格"
+									data-target="#mySpecModal" data-toggle="modal">
+									<i class="fa fa-file-o"></i> 自定义规格
+								</button>
+							</div>
+						</div> -->
+
+						<div>
+
+							<div class="row data-type">
+							    <!--  遍历规格 -->
+                                <div ng-repeat="temp in template">
+                                    <div class="col-md-2 title">{{temp.specName}}</div>
+                                    <!-- 遍历规格中的选项 -->
+                                    <div ng-repeat="opt in templateOption">
+                                       <!--  如果规格选项中的specId和规格的specId相等 就将规格选项中的data 给遍历出来 -->
+	                                    <div class="col-md-10 data"  ng-if="temp.specId == opt.specId">
+	                                           <span ng-repeat="data in opt.data"> 
+	                                               <input type="checkbox" 
+	                                               id = "{{data.optionName}}" 
+	                                               ng-click="checkOption($event,data.optionName)">{{data.optionName}}
+	                                            </span> 
+	                                         
+	                                    </div>
+                                    
+                                    </div>
+                                </div>
+
+							</div>
+
+
+							<div class="row data-type">
+								<table
+									class="table table-bordered table-striped table-hover dataTable">
+									<thead>
+										<tr>
+											<th class="sorting" ng-repeat="temp2 in template" >{{temp2.specName}}</th>
+											<th class="sorting">价格</th>
+											<th class="sorting">库存</th>
+											<th class="sorting">是否默认</th>
+										</tr>
+									</thead>
+									<tbody>
+									   <tr ng-repeat="optionDecare in optionDecareList" ng-if="(optionDecare.specOptionNum==1 && optionDecare.isSeleted1 ) || (optionDecare.specOptionNum==2 && optionDecare.isSeleted1  && optionDecare.isSeleted2)">
+									        <td>{{optionDecare.specOptionName1}}</td>
+									        <td ng-if="optionDecare.specOptionNum == 2">{{optionDecare.specOptionName2 }}</td>
+                                            <td><input type="number" class="form-control" placeholder="价格" ng-model="optionDecare.sellPrice">
+                                            </td>
+                                            <td><input type="number"  class="form-control" placeholder="库存数量" ng-model="optionDecare.stock">
+                                            </td>
+                                            <td><input type="radio" name="isDefault" ng-click="changeIsDefault(optionDecare.id)"></td>
+									   </tr>
+
+									</tbody>
+								</table>
+
+							</div>
+
+						</div>
+					</div>
+
+
+					<!--图片上传-->
+					<div class="tab-pane" id="pic_upload">
+						<div class="row data-type">
+							<!-- 颜色图片 -->
+							<div class="btn-group">
+								<button type="button" class="btn btn-default" title="新建"
+									data-target="#uploadModal" data-toggle="modal">
+									<i class="fa fa-file-o"></i> 新建
+								</button>
+								<button  ng-click="deleteImage()"
+								    type="button" class="btn btn-default" title="删除">
+									<i class="fa fa-trash-o"></i> 删除
+								</button>
+							</div>
+
+							<table
+								class="table table-bordered table-striped table-hover dataTable">
+								<thead>
+									<tr>
+										<th class="" style="padding-right: 0px">
+										  <input ng-model="all" ng-click="selAll()"
+											id="selall" type="checkbox" class="icheckbox_square-blue">
+										</th>
+										<th class="sorting">颜色</th>
+										<th class="sorting">图片排序</th>
+										<th class="sorting">图片地址</th>
+										<th class="sorting">图片</th>
+								</thead>
+								<tbody>
+									<tr ng-repeat="myimage in imageList">
+										<td><input type="checkbox" ng-checked="all" ng-click="selid(myimage.imgOrder)"></td>
+										<td>{{myimage.imgColor}}</td>
+										<td>{{myimage.imgOrder}}</td>
+										<td>{{myimage.imgPath}}</td>
+										<td><img src="//img.supergo.com/{{myimage.imgPath}}" width="100px"
+											height="100px"></td>
+									</tr>
+								</tbody>
+							</table>
+
+						</div>
+					</div>
+
+
+
+
+				</div>
+				<!--tab内容/-->
+				<!--表单内容/-->
+
+			</div>
+
+
+
+
+		</div>
+		<div class="btn-toolbar list-toolbar">
+			<button class="btn btn-primary" ng-click="save()">
+				<i class="fa fa-save"></i>保存
+			</button>
+			<button class="btn btn-default" ng-click="goListPage()">返回列表</button>
+		</div>
+
+	</section>
+
+
+	<!-- 上传窗口 -->
+	<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">上传商品图片</h3>
+				</div>
+				<div class="modal-body">
+
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td>颜色</td>
+							<td><input class="form-control" placeholder="颜色"
+								ng-model="image.color"></td>
+						</tr>
+						<tr>
+							<td>商品图片</td>
+							<td>
+								<table>
+									<tr>
+										<td><input type="file" id="file" ng-model="file" />
+											<button class="btn btn-primary" type="button"
+												ng-click="uploadFile()">上传</button></td>
+										<td>
+										  <img ng-if ="image.imgPath == null" ng-model="image.imgPath" src="//static.supergo.com/img/default.png" width="200px" height="200px">
+										  <img ng-if ="image.imgPath != null" ng-model="image.imgPath" src="//img.supergo.com/{{image.imgPath}}" width="200px" height="200px">
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" ng-click="addImageList()"
+						data-dismiss="modal" aria-hidden="true">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 选择产品 -->
+	<div class="modal fade" id="myProduct" tabindex="-1" role="dialog"
+		aria-labelledby="myProduct" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myProduct">选择产品</h3>
+				</div>
+
+				<div class="modal-body">
+
+					<!-- 数据表格 -->
+					<div class="table-box">
+						<!--搜索栏-->
+						<table class="table table-bordered table-striped">
+							<tr>
+								<td><input class="form-control"
+									placeholder="搜索产品名称,未通过审核的不显示"
+									ng-model="searchBean.productName"></td>
+								<td>
+									<button class="btn btn-default" ng-click="reloadList()">查询</button>
+								</td>
+
+							</tr>
+
+						</table>
+						<!--工具栏/-->
+
+						<!--数据列表-->
+						<table id="dataList"
+							class="table table-bordered table-striped table-hover dataTable">
+							<thead>
+								<tr>
+									<th class="sorting_asc">ID</th>
+									<th class="sorting">名称</th>
+									<th class="sorting">一级</th>
+									<th class="sorting">二级</th>
+									<th class="sorting">三级</th>
+									<th class="text-center">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="product in productList">
+									<td>{{product.productId}}</td>
+									<td>{{product.productName}}</td>
+									<td>{{product.classify1}}</td>
+									<td>{{product.classify2}}</td>
+									<td>{{product.classify3}}</td>
+									</td>
+									<td class="text-center">
+										<button ng-click="selProduct(product)"
+										type="button" class="btn bg-olive btn-xs"
+										 data-dismiss="modal" aria-hidden="true">选择</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<!-- angularjs提供的分页控件 -->
+						<tm-pagination conf="paginationConf"></tm-pagination>
+
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" ng-click="add_spec_entity()"
+						data-dismiss="modal" aria-hidden="true">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 自定义规格窗口 -->
+	<div class="modal fade" id="mySpecModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">自定义规格</h3>
+				</div>
+				<div class="modal-body">
+
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td>规格名称</td>
+							<td><input class="form-control" placeholder="规格名称"
+								ng-model="spec_entity.text"></td>
+						</tr>
+						<tr>
+							<td>规格选项(用逗号分隔)</td>
+							<td><input class="form-control" placeholder="规格选项"
+								ng-model="spec_entity.values"></td>
+						</tr>
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" ng-click="add_spec_entity()"
+						data-dismiss="modal" aria-hidden="true">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 正文区域 /-->
+	<script type="text/javascript">
+		var editor;
+		KindEditor.ready(function(K) {
+			editor = K.create('textarea[name="content"]', {
+				allowFileManager : true
+			});
+		});
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbOrdersManageMapperExt">
+	
+	<sql id="where">
+	     <if test="memberId != null and memberId != '' ">
+	       AND member_id = #{memberId}
+	     </if>
+	     <if test="ordersubId != null and ordersubId != '' ">
+           AND tso.ordersub_id = #{ordersubId}
+         </if>
+	     <if test="orderStatus != null and orderStatus != '' ">
+           AND order_status = #{orderStatus} 
+         </if>
+		<if test="startTime!=null and startTime!=''">  
+		    <![CDATA[   and DATE_FORMAT(tso.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{startTime}, '%Y-%m-%d')   ]]>  
+		</if>  
+		<if test="endTime!=null and endTime!=''">  
+		    <![CDATA[  and DATE_FORMAT(tso.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')    ]]>  
+		</if>
+	</sql>
+	
+	<select id="selectByoManage" parameterType="com.supergo.pojo.ext.TbOrderManage" resultType="com.supergo.pojo.ext.TbOrderManage">
+	SELECT
+		toi.goods_id goodsId,	
+		toi.goods_name goodsName,
+		tso.shop_name shopName,
+	    tso.ordersub_id ordersubId,
+	    tso.order_id orderId,
+	    tod.recive_address reciveAddress,
+	    tod.recive_name reciveName,
+	    tod.recive_mobile reciveMobile,
+	    tso.paymoney,
+	    tm.member_name memberName,
+	    tso.create_time createTime,
+	    tso.pay_status payStatus,
+	    tso.order_status orderStatus
+			
+    FROM
+	    tb_sub_order tso
+	    LEFT JOIN tb_order_delivery tod ON tod.ordersub_id = tso.ordersub_id
+		LEFT JOIN tb_order_item	toi ON toi.ordersub_id = tso.ordersub_id
+		LEFT JOIN tb_member tm ON tm.member_id = tso.member_id
+	<where>
+            <include refid="where"></include>
+    </where>
+		
+	</select>
+	<select id="selectOrderByKey" parameterType="java.lang.String" resultType="com.supergo.pojo.TbOrder">
+		SELECT
+			tor.order_id orderId,
+			tor.member_id memberId,
+			tor.address address,
+			tor.crate_time crateTime,
+			tor.update_time updateTime,
+			tor.totalmoney totalmoney
+		FROM
+			tb_order tor
+		LEFT JOIN tb_sub_order tso ON tor.order_id = tso.order_id
+		WHERE tso.ordersub_id = #{ordersubId}
+	</select>
+	<select id="selectOrderItem" parameterType="java.lang.String" resultType="com.supergo.pojo.ext.TbOrderManage">
+		SELECT
+			toi.goods_id goodsId,
+			toi.goods_name goodsName,
+			toi.item_status ItemStatus,
+			tso.shop_name shopName,
+			tso.ordersub_id ordersubId,
+			tso.order_status orderStatus 
+		FROM
+			tb_sub_order tso
+			LEFT JOIN tb_order_item toi ON toi.ordersub_id = tso.ordersub_id 
+		WHERE
+          	 tso.ordersub_id = #{ordersubId}
+    	ORDER BY
+			tso.ordersub_id
+	</select>
+</mapper>

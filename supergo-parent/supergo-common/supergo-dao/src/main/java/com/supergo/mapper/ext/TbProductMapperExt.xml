@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbProductMapperExt">
+	<resultMap id="BaseResultMap" type="com.supergo.pojo.TbProduct">
+		<id column="product_id" property="productId" jdbcType="INTEGER" />
+		<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+		<result column="classify1" property="classify1" jdbcType="INTEGER" />
+		<result column="classify2" property="classify2" jdbcType="INTEGER" />
+		<result column="classify3" property="classify3" jdbcType="INTEGER" />
+		<result column="template" property="template" jdbcType="INTEGER" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="brand" property="brand" jdbcType="INTEGER" />
+		<result column="subtitle" property="subtitle" jdbcType="VARCHAR" />
+		<result column="packlist" property="packlist" jdbcType="VARCHAR" />
+		<result column="afterservice" property="afterservice" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="create_id" property="createId" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_id" property="updateId" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="CHAR" />
+		<result column="bak1" property="bak1" jdbcType="VARCHAR" />
+		<result column="bak2" property="bak2" jdbcType="VARCHAR" />
+		<result column="bak3" property="bak3" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="selectByProduct" resultMap="BaseResultMap"
+		parameterType="com.supergo.pojo.TbProduct">
+		SELECT
+		p.product_id product_id,p.product_name
+		product_name,c1.category_name classify1,
+		c2.category_name
+		classify2,c3.category_name classify3,p.`status`
+		`status`,
+		p.template
+		template, p.brand brand, p.subtitle subtitle, p.packlist packlist,
+		p.afterservice afterservice
+		FROM
+		tb_product p
+		LEFT JOIN tb_category c1 ON
+		p.classify1 = c1.category_id
+		LEFT JOIN tb_category c2 ON p.classify2 =
+		c2.category_id
+		LEFT JOIN tb_category c3 ON p.classify3 = c3.category_id
+		<where>
+			<if test="shopId != null">AND p.shop_id = #{shopId}</if>
+			<if test="productName != null">AND p.product_name LIKE '%${productName}%' </if>
+			<if test="status != null">AND p.status= #{status}</if>
+			<if test="isDelete != null">AND p.is_delete= #{isDelete}</if>
+		</where>
+		ORDER BY p.product_id DESC
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		product_id,product_name, classify1,
+		classify2, classify3,
+		`status`,
+		template, brand, subtitle, packlist, afterservice
+		FROM
+		tb_product
+		<where>
+			<if test="_parameter != null"> AND product_id = #{productId}</if>
+			AND is_delete = 'N'
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="com.supergo.pojo.TbProduct"
+		keyProperty="productId">
+		<selectKey keyProperty="productId" order="AFTER" resultType="java.lang.Integer">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into tb_product (shop_id,classify1, classify2,
+		classify3,
+		template,product_name,brand, subtitle, packlist,
+		afterservice, status,
+		create_id,create_time,update_id,update_time,is_delete)
+		values
+		(#{shopId,jdbcType=INTEGER},#{classify1,jdbcType=INTEGER},
+		#{classify2,jdbcType=INTEGER},
+		#{classify3,jdbcType=INTEGER},
+		#{template,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR},
+		#{brand,jdbcType=INTEGER}, #{subtitle,jdbcType=VARCHAR},
+		#{packlist,jdbcType=VARCHAR},
+		#{afterservice,jdbcType=VARCHAR},'0',
+		#{createId,jdbcType=VARCHAR}, NOW(),null,null,'N')
+	</insert>
+	<select id="selectProduct" parameterType="com.supergo.pojo.TbProduct"
+		resultType="com.supergo.pojo.TbProduct">
+		SELECT
+		tp.product_id productId,
+		tp.shop_id shopId,
+		tc.category_name classify1,
+		tc2.category_name classify2,
+		tc3.category_name classify3,
+		tt.template_name template,
+		tp.product_name productName,
+		tp.subtitle subtitle,
+		tp.STATUS STATUS,
+		tp.create_time createTime,
+		ts.username createId,
+		ts2.username updateId,
+		tp.update_time updateTime
+		FROM
+		tb_product tp
+		LEFT JOIN tb_category tc ON tp.classify1 = tc.category_id
+		LEFT JOIN tb_category tc2 ON tp.classify2 = tc2.category_id
+		LEFT JOIN tb_category tc3 ON tp.classify3 = tc3.category_id
+		LEFT JOIN tb_template tt ON tp.template = tt.template_id
+		LEFT JOIN tb_sysuser ts ON tp.create_id = ts.sysuser_id
+		LEFT JOIN tb_sysuser ts2 ON tp.update_id = ts2.sysuser_id
+		<where>
+			<if test="productName != null"> AND tp.product_name LIKE '%${productName}%'</if>
+			AND tp.is_delete = 'N'
+		</where>
+		ORDER BY tp.update_time DESC
+	</select>
+</mapper>

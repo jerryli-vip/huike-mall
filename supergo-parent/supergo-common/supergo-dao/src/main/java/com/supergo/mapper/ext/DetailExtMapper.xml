@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.DetailExtMapper">
+	<resultMap id="BaseResultMap" type="com.supergo.pojo.ext.OrderListExt">
+	 <id column="ordersub_id" property="ordersubId" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="CHAR" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="paymoney" property="paymoney" jdbcType="DECIMAL" />
+    <result column="expressfee" property="expressfee" jdbcType="DECIMAL" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_type" property="goodsType" jdbcType="VARCHAR" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="actual_payment" property="actualPayment" jdbcType="DECIMAL" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="recive_name" property="reciveName" jdbcType="VARCHAR" />
+    <result column="recive_province" property="reciveProvince" jdbcType="INTEGER" />
+    <result column="recive_city" property="reciveCity" jdbcType="INTEGER" />
+    <result column="recive_area" property="reciveArea" jdbcType="INTEGER" />
+    <result column="recive_address" property="reciveAddress" jdbcType="VARCHAR" />
+    <result column="recive_mobile" property="reciveMobile" jdbcType="VARCHAR" />
+    <result column="recive_email" property="reciveEmail" jdbcType="VARCHAR" />
+    <result column="post_id" property="postId" jdbcType="VARCHAR" />
+    <result column="post_status" property="postStatus" jdbcType="CHAR" />
+    <result column="post_fee" property="postFee" jdbcType="DECIMAL" />
+    <result column="post_time" property="postTime" jdbcType="TIMESTAMP" />
+    <result column="delivery_time" property="deliveryTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="CHAR" />
+  </resultMap>
+<select id="selectById" resultMap="BaseResultMap">
+   SELECT tbs.ordersub_id,tbs.expressfee,tbs.paymoney,tbs.shop_name,tbo.goods_name,tbo.goods_type,tbo.actual_payment,tbo.quantity,tbo.sell_price,tbo.goods_id
+	FROM tb_sub_order tbs LEFT JOIN tb_order_item tbo
+	ON tbs.ordersub_id = tbo.ordersub_id
+	WHERE  tbs.ordersub_id=#{ordersubId}
+</select>
+
+
+<select id="selectDeliveryById" resultMap="BaseResultMap">
+   SELECT tbo.recive_name,tbo.recive_mobile,tbo.recive_address,tbo.post_id,tbo.post_fee,tbo.delivery_time,tbo.status,tbo.recive_email
+	FROM tb_order_delivery tbo
+	WHERE  tbo.ordersub_id=#{ordersubId}
+</select>
+
+<select id="selectGoodsListById" resultMap="BaseResultMap">
+    SELECT  tbo.goods_id,tbo.goods_name,tbo.goods_type,tbo.sellprice,tbo.quantity
+	FROM tb_order_item tbo
+	WHERE  tbo.ordersub_id=#{ordersubId}
+</select>
+<!-- 商品详细信息查询  -->
+<select id="selectItemListById" resultMap="BaseResultMap">
+    SELECT  tbo.goods_id,tbo.goods_name,tbo.item_status,tbs.shop_name
+	FROM tb_sub_order tbs LEFT JOIN tb_order_item tbo
+	ON tbs.ordersub_id = tbo.ordersub_id
+	WHERE  tbs.ordersub_id=#{ordersubId}
+</select>
+
+
+
+
+
+
+
+
+
+</mapper>

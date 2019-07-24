@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<context:property-placeholder location="classpath*:params.properties" />
+
+	<!-- 配置Controller Bean的组件扫描器 -->
+<!-- 	<context:component-scan base-package="com.supergo.controller" /> -->
+	<!-- 配置三大组件 -->
+	<mvc:annotation-driven />
+
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/html/"></property>
+		<property name="suffix" value=".html"></property>
+	</bean>
+
+	<!-- 配置静态资源处理器 -->
+	<mvc:default-servlet-handler />
+	<!-- 配置拦截器(全局) -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<!-- 拦截器可以有多个，定义某一个拦截器 -->
+			<mvc:mapping path="/**" />
+			<!-- 自定义拦截器是谁 -->
+			<bean class="com.supergo.controller.interceptor.AllowOriginInterceptor"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<!-- 拦截器可以有多个，定义某一个拦截器 -->
+			<mvc:mapping path="/**" />
+			<!-- 自定义拦截器是谁 -->
+			<bean class="com.supergo.controller.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+		
+	</mvc:interceptors>
+
+	<!-- 当DispatcherServlet配置为/来拦截请求的时候，需要配置静态资源的访问映射 -->
+	<!-- location中的/对应的是ssm-web工程的WebContent目录 -->
+	<!-- mapping中的/对应的是http://localhost:8280/ssm-web/ -->
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/css/" mapping="/css/**" />
+	<mvc:resources location="/img/" mapping="/img/**" />
+	<mvc:resources location="/plugins/" mapping="/plugins/**" />
+
+	<!-- 配置MultipartResolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="5000000"></property>
+	</bean>
+	
+	<import resource="applicationContext-dubbo.xml"/>
+</beans>

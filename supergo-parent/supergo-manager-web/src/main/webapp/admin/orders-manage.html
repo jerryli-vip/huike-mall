@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<!-- 页面meta -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>订单管理</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+<!-- 加入angularJS -->
+<script src="/plugins/angularjs/angular.min.js"></script>
+<!-- 加入angularjs的pagination模块 -->
+<script src="/plugins/angularjs/pagination.js"></script>
+<link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+<!-- 引入基础模块和控制器 -->
+<script src="/js/supergo/base/base_app_pagination.js?"+newDate()></script>
+<script src="/js/supergo/base/base_controller.js?"+newDate()></script>
+<!-- 编写.js文件 -->
+<script src="/js/supergo/orders-manage.js"></script>
+<!-- 引入时间控件 -->
+<script src="../plugins/dayjs/dayjs.min.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="supergo"
+	ng-controller="manageController">
+	<!-- .box-body -->
+	<div class="box-header with-border">
+		<h3 class="box-title">订单管理</h3>
+	</div>
+	<div class="box-body">
+		<!-- 数据表格 -->
+		<div class="table-box">
+			<!--工具栏-->
+			<div class="pull-left">
+				<div class="form-group form-inline">
+					<div class="btn-group">
+						<button type="button" class="btn btn-default" title="刷新"
+							onclick="window.location.reload();">
+							<i class="fa fa-refresh"></i> 刷新
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="box-tools pull-right">
+				<div class="has-feedback">
+					订单状态： <select ng-model="searchBean.orderStatus" ng-change="look();">
+						<option value="">全部</option>
+						<option value="0">支付成功</option>
+						<option value="1">支付失败</option>
+						<option value="2">已支待确认</option>
+						<option value="3">出库</option>
+						<option value="4">取消支付</option>
+						<option value="5">客户取消</option>
+						<option value="6">失效订单</option>
+					</select> 订单号： <input ng-model="searchBean.ordersubId"> 下单人： <input
+						ng-model="searchBean.memberId"> 下单时间： <input type="date"
+						class="demo-input" ng-model="searchBean.startTime"
+						ng-click="lookStartTime()">- <input type="date"
+						class="demo-input" ng-model="searchBean.endTime">
+					<button class="btn btn-default" ng-click="reloadList()">查询</button>
+				</div>
+			</div>
+			<!--工具栏/-->
+
+			<!--数据列表-->
+			<table id="dataList"
+				class="table table-bordered table-striped table-hover dataTable">
+				<thead>
+					<tr>
+						<th class="" style="padding-right: 0px"><input id="selall"
+							type="checkbox" class="icheckbox_square-blue"></th>
+						<th class="sorting_asc">订单号</th>
+						<th class="sorting">主订单号</th>
+						<th class="sorting">收货人</th>
+						<th class="sorting">联系方式</th>
+						<th class="sorting">结算金额</th>
+						<th class="sorting">下单人</th>
+						<th class="sorting">下单时间</th>
+						<th class="sorting">订单状态</th>
+						<th class="sorting">支付状态</th>
+						<th class="sorting">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="manage in ManageList">
+						<td><input type="checkbox"></td>
+						<td><a data-toggle="modal" data-target="#showModal"
+							ng-click="queryDetails(manage.ordersubId)" />{{manage.ordersubId}}</td>
+						<td>{{manage.orderId}}</td>
+						<td>{{manage.reciveName}}</td>
+						<td>{{manage.reciveMobile}}</td>
+						<td>{{manage.paymoney}}</td>
+						<td>{{manage.memberName}}</td>
+						<td>{{manage.createTime}}</td>
+						<td class="text-center"><span ng-if="manage.orderStatus==0">支付成功</span>
+							<span ng-if="manage.orderStatus==1">支付失败</span> <span
+							ng-if="manage.orderStatus==2">已支付待确认</span> <span
+							ng-if="manage.orderStatus==3">出库</span> <span
+							ng-if="manage.orderStatus==4">取消支付</span> <span
+							ng-if="manage.orderStatus==5">客户取消</span> <span
+							ng-if="manage.orderStatus==6">作废订单</span></td>
+						<td class="text-center"><span ng-if="manage.payStatus==0">支付成功</span>
+							<span ng-if="manage.payStatus==1">支付失败</span> <span
+							ng-if="manage.payStatus==2">支付待确认</span></td>
+						<td>
+							<button type="button" class="btn bg-olive btn-xs"
+								data-toggle="modal" data-target="#REModal"
+								ng-click="initApply(manage)">退换货申请</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<!-- angularjs提供的分页控件 -->
+			<tm-pagination conf="paginationConf"></tm-pagination>
+			<!-- 退换货申请-->
+			<div class="modal fade bs-example-modal-lg" id="REModal"
+				tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">×</button>
+							<h3 id="myModalLabel">退换货申请</h3>
+						</div>
+						<div class="modal-body">
+							<!-- 正文区域 -->
+							<table id="dataList"
+								class="table table-bordered table-striped table-hover dataTable">
+								<thead>
+									<tr >
+										<th class="sorting_asc ">退换货商品明细</th>
+									</tr>
+									<tr>
+										<th class="sorting_asc">商品ID</th>
+										<th class="sorting">子订单号</th>
+										<th class="sorting">店铺名称</th>
+										<th class="sorting">商品名称</th>
+										<th class="sorting">商品状态</th>
+										<th class="sorting">操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="REOrderItem in returnOrderItemList">
+										<td>{{REOrderItem.goodsId}}</td>
+										<td>{{REOrderItem.ordersubId}}</td>
+										<td>{{REOrderItem.shopName}}</td>
+										<td>{{REOrderItem.goodsName}}</td>
+										<td>{{REOrderItem.itemStatus}}</td>
+										<td>
+											<button type="button" class="btn bg-olive btn-xs"
+												data-toggle="modal" data-target="#returnReasonModel" ng-click="bangDingReturn(REOrderItem)">退货申请</button>
+											
+											<button type="button" class="btn bg-olive btn-xs"
+												data-toggle="modal" data-target="#exchangeRreasonModel" 
+												ng-click="bangDingExchange(REOrderItem)">换货申请</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="modal-footer">
+								<button class="btn btn-default" data-dismiss="modal"
+									aria-hidden="true">关闭</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 商品退货理由-->
+			<div class="modal fade" id="returnReasonModel" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">×</button>
+							<h3 id="myModalLabel">商品退货原因</h3>
+						</div>
+						<table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+							<tr>
+							<td><input ng-model="Goods.returnReason" class="form-control" placeholder="商品退货原因" ></td>
+							<td><input ng-model="Goods.goodsId" type="hidden" ></td>
+							<td><input ng-model="Goods.ordersubId" type="hidden" ></td>
+							</tr>
+						</table>
+						<div class="modal-footer">
+							<button class="btn btn-success" data-dismiss="modal"
+								aria-hidden="true" ng-click="returnItem()">确定</button>
+							<button class="btn btn-default" data-dismiss="modal"
+								aria-hidden="true">关闭</button>
+						</div>
+					</div>
+				</div>
+			</div> 
+			<!-- 商品换货理由-->
+			<div class="modal fade" id="exchangeRreasonModel" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">×</button>
+							<h3 id="myModalLabel">商品换货原因</h3>
+						</div>
+						<table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+							<tr>
+							<td><input ng-model="Goods.exchangeReason" class="form-control" placeholder="商品换货原因" ></td>
+							<td><input ng-model="Goods.goodsId" type="hidden" ></td>
+							<td><input ng-model="Goods.ordersubId" type="hidden" ></td>
+							</tr>
+						</table>
+						<div class="modal-footer">
+							<button class="btn btn-success" data-dismiss="modal"
+								aria-hidden="true" ng-click="exchangeItem()">确定</button>
+							<button class="btn btn-default" data-dismiss="modal"
+								aria-hidden="true">关闭</button>
+						</div>
+					</div>
+				</div>
+			</div> 
+			<!-- 订单详情-->
+			<div class="modal fade" id="showModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog" style="width: 1100px">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">×</button>
+							<h3 id="myModalLabel">订单详情</h3>
+						</div>
+						<div class="modal-body">
+							<!-- 正文区域 -->
+							<section class="content">
+								<div class="box-body">
+									<!--tab页-->
+									<div class="nav-tabs-custom">
+
+										<!--tab头-->
+										<ul class="nav nav-tabs">
+											<li class="active"><a href="#order" data-toggle="tab">订单信息</a>
+											</li>
+											<li><a href="#orderlist" data-toggle="tab">订单明细</a></li>
+											<li><a href="#customer" data-toggle="tab">收货人</a></li>
+											<li><a href="#orderstatus" data-toggle="tab">订单状态</a></li>
+										</ul>
+										<!--tab头/-->
+
+										<!--tab内容-->
+										<div class="tab-content">
+											<!--表单内容-->
+											<div class="tab-pane active" id="order">
+												<div class="row data-type">
+													<table
+														class="table table-bordered table-striped table-hover dataTable">
+														<tbody>
+															<tr>
+																<td>订单号</td>
+																<td>{{orderList.orderId}}</td>
+																<td>会员id</td>
+																<td>{{orderList.memberId}}</td>
+															</tr>
+															<tr>
+																<td>物流地址</td>
+																<td>{{orderList.address}}</td>
+																<td>订单创建时间</td>
+																<td>{{orderList.crateTime}}</td>
+															</tr>
+															<tr>
+																<td>修改时间</td>
+																<td>{{orderList.updateTime}}</td>
+																<td>支付总价格</td>
+																<td>{{orderList.totalmoney}}</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<!--订单明细-->
+											<div class="tab-pane" id="orderlist">
+												<div class="row data-type">
+													<table
+														class="table table-bordered table-striped table-hover dataTable">
+														<thead>
+															<tr>
+																<th class="sorting_asc">订单表子表</th>
+																<th class="sorting_asc">商品id</th>
+																<th class="sorting">商品名称</th>
+																<th class="sorting">商品规格</th>
+																<th class="sorting">售价</th>
+																<th class="sorting">实际支付</th>
+																<th class="sorting">购买数量</th>
+																<th class="sorting">是否有优惠</th>
+																<th class="sorting">支付状态</th>
+																<th class="sorting">创建时间</th>
+																<th class="sorting">更新时间</th>
+																<th class="sorting">创建人</th>
+																<th class="sorting">修改人</th>
+																<th class="sorting">商品状态</th>
+															</tr>
+														</thead>
+														<tbody ng-repeat="orderItem in orderItemList">
+															<tr>
+																<td>{{orderItem.ordersubId}}</td>
+																<td>{{orderItem.goodsId}}</td>
+																<td>{{orderItem.goodsName}}</td>
+																<td>{{orderItem.goodsType}}</td>
+																<td>{{orderItem.sellPrice}}</td>
+																<td>{{orderItem.actualPayment}}</td>
+																<td>{{orderItem.quantity}}</td>
+																<td>{{orderItem.discount}}</td>
+																<td><span ng-if="orderItem.payStatus==0">支付成功</span>
+																	<span ng-if="orderItem.payStatus==1">支付失败</span> <span
+																	ng-if="orderItem.payStatus==2">支付待确认</span></td>
+																</td>
+																<td>{{orderItem.createTime}}</td>
+																<td>{{orderItem.updateTime}}</td>
+																<td>{{orderItem.createId}}</td>
+																<td>{{orderItem.updateId}}</td>
+																<td><span ng-if="orderItem.itemStatus==1">未发货</span>
+																	<span ng-if="orderItem.itemStatus==2">取消订单</span> <span
+																	ng-if="orderItem.itemStatus==3">已发货</span> <span
+																	ng-if="orderItem.itemStatus==4">已收货</span> <span
+																	ng-if="orderItem.itemStatus==5">换货中</span> <span
+																	ng-if="orderItem.itemStatus==6">已换货</span> <span
+																	ng-if="orderItem.itemStatus==7">退货中</span> <span
+																	ng-if="orderItem.itemStatus==8">已退货</span> <span
+																	ng-if="orderItem.itemStatus==9">已评价</span></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+
+											<!--收货人-->
+											<div class="tab-pane" id="customer">
+												<div class="row data-type">
+													<table
+														class="table table-bordered table-striped table-hover dataTable">
+														<tbody>
+															<tr>
+																<td>收货人</td>
+																<td>{{deliveryList.reciveName}}</td>
+																<td>收货地址</td>
+																<td>{{deliveryList.reciveAddress}}</td>
+															</tr>
+															<tr>
+																<td>运费</td>
+																<td>{{deliveryList.postFee}}</td>
+															</tr>
+															<tr>
+																<td>手机号码</td>
+																<td>{{deliveryList.reciveMobile}}</td>
+																<td>邮箱</td>
+																<td>{{deliveryList.reciveEmail}}</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+
+											<!--订单状态-->
+											<div class="tab-pane" id="orderstatus">
+												<div class="row data-type">
+													<table
+														class="table table-bordered table-striped table-hover dataTable">
+														<tbody>
+															<tr>
+																<td>订单状态</td>
+																<td><span ng-if="subOrderList.orderStatus==0">未支付</span>
+																	<span ng-if="subOrderList.orderStatus==1">客户取消</span> <span
+																	ng-if="subOrderList.orderStatus==2">订单失效</span> <span
+																	ng-if="subOrderList.orderStatus==3">支付成功</span> <span
+																	ng-if="subOrderList.orderStatus==4">商品出库</span> <span
+																	ng-if="subOrderList.orderStatus==5">部分收货</span> <span
+																	ng-if="subOrderList.orderStatus==6">确认收货</span> <span
+																	ng-if="subOrderList.orderStatus==7">完成交易</span> <span
+																	ng-if="subOrderList.orderStatus==8">评价成功</span> <span
+																	ng-if="subOrderList.orderStatus==9">商品换货</span> <span
+																	ng-if="subOrderList.orderStatus==10">商品退货</span></td>
+																<td>支付状态</td>
+																<td><span ng-if="subOrderList.payStatus==0">支付成功</span>
+																	<span ng-if="subOrderList.payStatus==1">支付失败</span> <span
+																	ng-if="subOrderList.payStatus==2">支付待确认</span></td>
+															</tr>
+															<tr>
+																<td>处理时间</td>
+																<td>{{subOrderList.updateTime}}</td>
+
+																<td>操作人</td>
+																<td>{{subOrderList.updateId}}</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<!--tab内容/-->
+										<!--表单内容/-->
+									</div>
+								</div>
+							</section>
+							<div class="modal-footer">
+								<button class="btn btn-default" data-dismiss="modal"
+									aria-hidden="true">关闭</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--数据列表/-->
+		</div>
+		<!-- 数据表格 /-->
+	</div>
+	<!-- /.box-body -->
+</body>
+
+</html>

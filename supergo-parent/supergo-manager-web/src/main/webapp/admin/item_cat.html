@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>商品分类管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css" />
+	<!-- 加入angularJS -->
+    <script src="/plugins/angularjs/angular.min.js"></script>
+    <!-- 加入angularjs的pagination模块 -->
+    <script src="/plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+    
+    <!-- 引入基础模块和控制器 -->
+    <script src="/js/supergo/base/base_app_pagination.js"></script>
+    <script src="/js/supergo/base/base_controller.js"></script>
+    
+    <!-- 编写template.js文件 -->
+    <script src="/js/supergo/category.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="supergo" ng-controller="categoryController" >
+  <!-- .box-body -->
+                
+                    <div class="box-header with-border">
+                        <h3 class="box-title">商品分类管理     
+                       	</h3>
+                    </div>
+
+                    <div class="box-body">
+                  			 <ol class="breadcrumb">	                        	
+                        		<li ng-if = "searchBean.level>0">
+		                        	<button type="button"   ng-click = "topCategory()">顶级分类列表</button>
+		                        </li>
+		                        <li  ng-if = "searchBean.level>1">
+		                       	<button type="button"  ng-click = "SecCategory()">{{searchBean.categoryName}}</button>	
+		                        </li>
+		                
+	                        </ol>
+
+                        <!-- 数据表格 -->
+                        <div class="table-box">
+							
+                            <!--工具栏-->
+                            <div class="pull-left">
+                                <div class="form-group form-inline">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#addModal" ng-click="addCategory={}"><i class="fa fa-file-o"></i> 新建</button>
+                                        <button type="button" class="btn btn-default" title="删除" ng-click="batchDelete()"><i class="fa fa-trash-o"></i> 删除</button>
+                                        <button type="button" class="btn btn-default" title="刷新"  ng-click="flase()"><i class="fa fa-check"></i> 刷新</button>
+                                       
+                                    </div>
+                                </div>
+                            </div>                          
+                       		
+                        
+			                <!--数据列表-->
+			                  <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+			                      <thead>
+			                          <tr>
+			                              <th class="" style="padding-right:0px">
+			                                  <input type="checkbox" class="icheckbox_square-blue" ng-model="all" ng-click="selAll()"
+			                              </th> 
+										  <th class="sorting_asc">分类ID</th>
+									      <th class="sorting">分类名称</th>									   
+											<th class="sorting_asc">排序</th>
+									     						
+					                      <th class="text-center">操作</th>
+			                          </tr>
+			                      </thead>
+			                      <tbody>
+			                          <tr ng-repeat="category in categoryList">
+			                              <td><input  type="checkbox" ng-checked="all" ng-click="updateSelection($event,category.categoryId)"></td>			                              
+				                          <td>{{category.categoryId}}</td>
+									      <td>{{category.categoryName}}</td>									    
+									      <td>{{category.sort}}</td>			      
+		                                  <td class="text-center">		                                     
+		                                 <div ng-if = "category.level!=3"> <button type="button" class="btn bg-olive btn-xs" ng-click="queryNext(category)">查询下级</button> </div>    		                                     
+		                                 	  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" ng-click= "showEditPage(category)" >修改</button>                                           
+		                                  </td>
+			                          </tr>
+			                      </tbody>
+			                  </table>
+			                  <!--数据列表/-->                      
+						
+                        </div>
+                        <!-- 数据表格 /-->
+                        <!-- 分页插件 /-->
+                        <tm-pagination conf="paginationConf"></tm-pagination>
+                        
+                        
+                     </div>
+                    <!-- /.box-body -->
+              
+                                
+<!-- 新建窗口 -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" >
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">商品分类编辑</h3>
+		</div>
+		<div class="modal-body">							
+			
+			<table class="table table-bordered table-striped"  width="800px">
+				
+				<input type="hidden" value="category.level" ng-model="category.level"></input>
+				<input type="hidden" value="category.parentId" ng-model="category.parentId"></input>
+		      	<tr>
+		      		<td>新建商品分类名称</td>
+		      		<td><input  class="form-control" placeholder="新建商品分类名称" ng-model="addCategory.categoryName">  </td>
+		      	</tr>	
+		      	<tr>
+		      		<td>新建商品分类排序</td>
+		      		<td><input  class="form-control" placeholder="新建商品分类排序" ng-model="addCategory.sort">  </td>
+		      	</tr>				
+		      	     	
+			 </table>				
+			
+		</div>
+		<div class="modal-footer">						
+			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="save()">保存</button>
+			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+		</div>
+	  </div>
+	</div>
+</div>
+
+
+<!-- 修改窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" >
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">商品分类编辑</h3>
+		</div>
+		<div class="modal-body">							
+			
+			<table class="table table-bordered table-striped"  width="800px">
+				
+				<input type="hidden"  ng-model="category.level"></input>
+				<input type="hidden" value="category.parentId" ng-model="category.parentId"></input>
+		      	<tr>
+		      		<td>商品分类名称</td>
+		      		<td><input  class="form-control" placeholder="商品分类名称" ng-model="editCategory.categoryName">  </td>
+		      	</tr>	
+		      	<tr>
+		      		<td>商品分类排序</td>
+		      		<td><input  class="form-control" placeholder="商品分类排序" ng-model="editCategory.sort">  </td>
+		      	</tr>				
+		      	     	
+			 </table>				
+			
+		</div>
+		<div class="modal-footer">						
+			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="update()">保存</button>
+			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+		</div>
+	  </div>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supergo.mapper.ext.TbAuthorityMapperExt">
+	<select id="queryAuthority" parameterType="com.supergo.pojo.TbAuthority"
+		resultType="TbAuthority">
+		select authority_id authorityId,authority_name
+		authorityName,code,authority_priority
+		authorityPriority,authority_description
+		authorityDescription,url,parent_id parentId,create_id
+		createId,update_id updateId,update_time updateTime from tb_authority
+		<where>
+			is_delete = 'N'
+			<if test="authorityName != null">
+				AND authority_name like '%${authorityName}%'
+			</if>
+			<if test="type != null">
+				AND type = #{type}
+			</if>
+			AND authority_priority in (1,2,3)
+		</where>
+	</select>
+
+	<update id="batchManagerDelete" parameterType="java.util.List">
+		update tb_authority set is_delete = 'Y' where authority_id in
+		<foreach item="batch_delete_id" collection="list" open="("
+			separator="," close=")">
+			#{batch_delete_id}
+		</foreach>
+		AND type = 1
+	</update>
+	<insert id="insertAuthority" parameterType="com.supergo.pojo.TbAuthority" >
+		insert into tb_authority
+		(authority_name,code,authority_description,url,type,authority_priority,parent_id,is_delete,is_item,create_time,update_time,create_id,update_id)values(#{authorityName},#{code},#{authorityDescription},#{url},#{type},#{authorityPriority},#{parentId},#{isDelete},#{isItem},#{createTime},#{updateTime},#{createId},#{updateId})
+	</insert>
+	
+	<update id="updateAuthority" parameterType="com.supergo.pojo.TbAuthority" >
+		update tb_authority set authority_name =#{authorityName},code = #{code},authority_description=#{authorityDescription},url=#{url},authority_priority=#{authorityPriority},parent_id=#{parentId},is_item = #{isItem},update_id=#{updateId},update_time=#{updateTime} where authority_id =#{authorityId}
+	</update>
+	
+	<select id="queryParentAuthority"  parameterType="java.lang.Integer"  resultType="com.supergo.pojo.TbAuthority">
+		select authority_id authorityId,authority_name authorityName,parent_id parentId from tb_authority where authority_priority in  (0,1,2) AND is_delete = 'N' AND type=#{type}
+	</select>
+	<select id="selectGradeByParentId" resultType="java.lang.Integer">
+		select authority_priority authorityPriority from tb_authority where authority_id = #{parentId}
+	</select>
+</mapper>
