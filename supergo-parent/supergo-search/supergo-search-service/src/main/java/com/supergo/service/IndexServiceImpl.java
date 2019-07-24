@@ -1,12 +1,18 @@
 package com.supergo.service;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSONObject;
+import com.supergo.component.search.po.RequestVO;
+import com.supergo.component.search.po.ResponseVO;
+import com.supergo.component.search.service.SearchEngineComponent;
+import com.supergo.mapper.EsMapper;
+import com.supergo.mapper.TbBrandMapper;
+import com.supergo.mapper.TbTemplateMapper;
+import com.supergo.pojo.GoodsEs;
+import com.supergo.service.es.EsClientTool;
+import com.supergo.service.util.Constants.COMMON_TYPE;
+import com.supergo.vo.SearchResponseVo;
+import com.supergo.vo.TypeCountResponseVo;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.Strings;
@@ -25,19 +31,12 @@ import org.elasticsearch.search.suggest.completion.CompletionSuggestion;
 import org.elasticsearch.search.suggest.completion.CompletionSuggestionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.alibaba.dubbo.common.json.JSONObject;
-import com.alibaba.dubbo.config.annotation.Service;
-import com.supergo.component.search.po.RequestVO;
-import com.supergo.component.search.po.ResponseVO;
-import com.supergo.component.search.service.SearchEngineComponent;
-import com.supergo.mapper.EsMapper;
-import com.supergo.mapper.TbBrandMapper;
-import com.supergo.mapper.TbTemplateMapper;
-import com.supergo.pojo.GoodsEs;
-import com.supergo.service.es.EsClientTool;
-import com.supergo.service.util.Constants.COMMON_TYPE;
-import com.supergo.vo.SearchResponseVo;
-import com.supergo.vo.TypeCountResponseVo;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 @Service
 public class IndexServiceImpl implements IndexService {
@@ -61,7 +60,7 @@ public class IndexServiceImpl implements IndexService {
 
 	}
 
-	public SearchResponseVo search(Map<String, Object> searchMap) {
+	public SearchResponseVo search2(Map<String, Object> searchMap) {
 		// 索引名称
 		String index = "goods";
 		// 获取查询组装的对象

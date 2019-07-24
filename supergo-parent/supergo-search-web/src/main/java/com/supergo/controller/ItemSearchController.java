@@ -3,6 +3,7 @@ package com.supergo.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.supergo.component.search.po.ResponseVO;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +34,7 @@ public class ItemSearchController {
 	 * @return
 	 */
 	@RequestMapping(value="/search",method=RequestMethod.POST)
-	public SearchResponseVo search(@RequestBody(required = false) Map<String, Object> searchMap) {
+	public ResponseVO search(@RequestBody(required = false) Map<String, Object> searchMap) {
 
 		return indexService.search(searchMap);
 	}

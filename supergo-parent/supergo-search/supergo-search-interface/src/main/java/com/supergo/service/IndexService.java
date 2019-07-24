@@ -3,6 +3,7 @@ package com.supergo.service;
 import java.util.List;
 import java.util.Map;
 
+import com.supergo.component.search.po.ResponseVO;
 import com.supergo.vo.SearchResponseVo;
 
 /**
@@ -20,7 +21,7 @@ public interface IndexService {
 	 *            查询条件
 	 * @return 搜索结果封装对象
 	 */
-	SearchResponseVo search(Map<String, Object> queryConditions);
+	ResponseVO search(Map<String, Object> queryConditions);
 
 	public String getCommonData(Integer typeId);
 
