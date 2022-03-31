@@ -39,7 +39,7 @@
 		<mybatis.spring.version>1.2.2</mybatis.spring.version>
 		<pagehelper.version>4.0.0</pagehelper.version>
 		<mybatis.paginator.version>1.2.15</mybatis.paginator.version>
-		<spring.version>4.3.2.RELEASE</spring.version>
+		<spring.version>5.3.18</spring.version>
 		<spring.security.version>4.2.10.RELEASE</spring.security.version>
 
 		<!-- 业务层依赖 -->
